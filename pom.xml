@@ -11,13 +11,15 @@
   <properties>
     <encoding>UTF-8</encoding>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
-    <jvm.taget>1.7</jvm.taget>
+    <jvm.target>1.7</jvm.target>
     <spring.v>4.1.6.RELEASE</spring.v>
   </properties>
 
   <modules>
     <module>crepuscolo-core</module>
-    <!--module>crepuscolo-validation</module-->
+    <module>crepuscolo-hibernate</module>
+    <module>crepuscolo-validation</module>
+    <module>crepuscolo-todolist</module>
   </modules>
 
   <dependencyManagement>
@@ -49,12 +51,22 @@
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
         <artifactId>spring-aspects</artifactId>
         <version>${spring.v}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
         <version>${spring.v}</version>
       </dependency>
     </dependencies>
@@ -135,7 +147,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.5.1</version>
+          <version>3.3</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -185,7 +197,7 @@
             <include>**/*.java</include>
             <include>**/*.aj</include>
           </includes>
-          <complianceLevel>${jvm.taget}</complianceLevel>
+          <complianceLevel>${jvm.target}</complianceLevel>
         </configuration>
         <executions>
           <execution>
@@ -195,8 +207,8 @@
               <goal>test-compile</goal>
             </goals>
             <configuration>
-              <source>${jvm.taget}</source>
-              <target>${jvm.taget}</target>
+              <source>${jvm.target}</source>
+              <target>${jvm.target}</target>
             </configuration>
           </execution>
         </executions>
@@ -218,7 +230,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <configuration>
-          <targetJdk>${jvm.taget}</targetJdk>
+          <targetJdk>${jvm.target}</targetJdk>
         </configuration>
       </plugin>
       <plugin>
