@@ -12,6 +12,7 @@
     <encoding>UTF-8</encoding>
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
     <jvm.target>1.7</jvm.target>
+    <crepuscolo.version>0.1.0-SNAPSHOT</crepuscolo.version>
     <spring.v>4.1.6.RELEASE</spring.v>
   </properties>
 
@@ -24,6 +25,11 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>net.etalia</groupId>
+        <artifactId>crepuscolo-core</artifactId>
+        <version>${crepuscolo.version}</version>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
