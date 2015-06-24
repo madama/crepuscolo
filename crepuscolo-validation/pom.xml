@@ -15,10 +15,6 @@
       <artifactId>crepuscolo-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.etalia</groupId>
-      <artifactId>crepuscolo-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
     </dependency>
