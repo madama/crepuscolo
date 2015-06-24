@@ -12,7 +12,7 @@
   <dependencies>
     <dependency>
       <groupId>net.etalia</groupId>
-      <artifactId>crepuscolo-core</artifactId>
+      <artifactId>crepuscolo-hibernate</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
@@ -25,6 +25,12 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
+    </dependency>
+    <!-- TEST -->
+    <dependency>
+      <groupId>net.etalia</groupId>
+      <artifactId>crepuscolo-test</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
