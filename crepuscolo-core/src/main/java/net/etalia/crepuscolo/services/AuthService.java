@@ -58,16 +58,6 @@ public interface AuthService {
 	public Authenticable getPrincipalUser(Verification level);
 
 	/**
-	 * Retrieves the profileId specified in auth headers.
-	 * 
-	 * The verification level applies as if {@link #getPrincipalUserId(Verification)} is called.
-	 * 
-	 * @param level
-	 * @return
-	 */
-	public String getPrincipalProfileId(Verification level);
-
-	/**
 	 * Used internally to pretend to be a user before calling a method that relies on this service
 	 * to know which user to apply a certain procedure.
 	 * @param userId the userId of a user to pretend to be, will replace current principal user id if present
