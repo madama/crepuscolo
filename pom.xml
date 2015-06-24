@@ -13,6 +13,8 @@
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
     <jvm.target>1.7</jvm.target>
     <crepuscolo.version>0.1.0-SNAPSHOT</crepuscolo.version>
+    <aspectj.v>1.7.3</aspectj.v>
+    <hibernate.v>4.3.10.Final</hibernate.v>
     <spring.v>4.1.6.RELEASE</spring.v>
   </properties>
 
@@ -20,6 +22,7 @@
     <module>crepuscolo-core</module>
     <module>crepuscolo-hibernate</module>
     <module>crepuscolo-validation</module>
+    <module>crepuscolo-web</module>
     <module>crepuscolo-todolist</module>
   </modules>
 
@@ -28,6 +31,21 @@
       <dependency>
         <groupId>net.etalia</groupId>
         <artifactId>crepuscolo-core</artifactId>
+        <version>${crepuscolo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.etalia</groupId>
+        <artifactId>crepuscolo-hibernate</artifactId>
+        <version>${crepuscolo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.etalia</groupId>
+        <artifactId>crepuscolo-validation</artifactId>
+        <version>${crepuscolo.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.etalia</groupId>
+        <artifactId>crepuscolo-web</artifactId>
         <version>${crepuscolo.version}</version>
       </dependency>
       <dependency>
@@ -43,12 +61,27 @@
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
-        <version>1.7.3</version>
+        <version>${aspectj.v}</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjtools</artifactId>
-        <version>1.7.3</version>
+        <version>${aspectj.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-c3p0</artifactId>
+        <version>${hibernate.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>5.1.3.Final</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate.javax.persistence</groupId>
@@ -73,6 +106,11 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
+        <version>${spring.v}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
         <version>${spring.v}</version>
       </dependency>
     </dependencies>
