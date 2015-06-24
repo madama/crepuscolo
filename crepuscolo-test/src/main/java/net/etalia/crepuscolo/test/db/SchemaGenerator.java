@@ -13,7 +13,7 @@ public class SchemaGenerator {
 	private Configuration cfg;
 
 	public static void main(String[] args) throws Exception {
-		SchemaGenerator gen = new SchemaGenerator("net.etalia.domain");
+		SchemaGenerator gen = new SchemaGenerator("net.etalia.crepuscolo.domain");
 		gen.generate(Dialect.MYSQL5);
 	}
 
@@ -30,7 +30,7 @@ public class SchemaGenerator {
 	 * 
 	 * @param dbDialect to use
 	 */
-	private void generate(Dialect dialect) {
+	protected void generate(Dialect dialect) {
 		cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
@@ -83,7 +83,7 @@ public class SchemaGenerator {
 	/**
 	 * Holds the classnames of hibernate dialects for easy reference.
 	 */
-	private static enum Dialect {
+	protected static enum Dialect {
 		MYSQL5("org.hibernate.dialect.MySQL5InnoDBDialect"),
 		HSQL("org.hibernate.dialect.HSQLDialect");
 		private String dialectClass;
