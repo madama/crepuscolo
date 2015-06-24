@@ -1,0 +1,169 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-4.1.xsd
+						http://www.springframework.org/schema/mvc
+						http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+						http://www.springframework.org/schema/task 
+						http://www.springframework.org/schema/task/spring-task-4.1.xsd
+						">
+
+	<context:spring-configured/>
+
+	<context:property-placeholder location="classpath:/todolist.properties"/>
+
+	<!-- STORAGE -->
+	<bean id="apiDataSource" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${api.db.driver}" />
+		<property name="jdbcUrl" value="${api.db.url}" />
+		<property name="user" value="${api.db.user}" />
+		<property name="password" value="${api.db.pass}" />
+		<property name="minPoolSize" value="${api.db.minPoolSize}" />
+		<property name="maxPoolSize" value="${api.db.maxPoolSize}" />
+		<property name="maxConnectionAge" value="3600" />
+		<property name="idleConnectionTestPeriod" value="300" />
+	</bean>
+
+	<bean id="apiSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="apiDataSource" />
+		<property name="annotatedPackages" value="net.etalia.crepuscolo.todolist.domain" />
+		<property name="annotatedClasses">
+			<list>
+				<value>net.etalia.crepuscolo.todolist.domain.Task</value>
+				<value>net.etalia.crepuscolo.todolist.domain.TaskList</value>
+				<value>net.etalia.crepuscolo.todolist.domain.User</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">${api.db.showSql}</prop>
+				<prop key="hibernate.dialect">${api.db.dialect}</prop>
+			</props>
+		</property>
+		<property name="entityInterceptor" ref="apiChainInterceptor"/>
+	</bean>
+
+	<bean id="apiTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="apiSessionFactory" />
+	</bean>
+
+	<bean id="apiTransactionSupport" class="org.springframework.transaction.aspectj.AnnotationTransactionAspect" factory-method="aspectOf">
+		<property name="transactionManager" ref="apiTransactionManager"/>
+	</bean>
+
+	<tx:annotation-driven transaction-manager="apiTransactionManager" mode="aspectj"/>
+
+	<bean id="apiDatesInterceptor" class="net.etalia.crepuscolo.hibernate.HibernateDatesInterceptor"/>
+
+	<bean id="apiChainInterceptor" class="net.etalia.crepuscolo.utils.ChainedInterceptor">
+		<property name="chain">
+			<list>
+				<ref bean="apiDatesInterceptor"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean name="validationService" class="net.etalia.crepuscolo.services.ValidationServiceImpl" init-method="init"/>
+
+	<bean id="apiStorageService" class="net.etalia.crepuscolo.hibernate.HibernateStorageServiceImpl">
+		<property name="sessionFactory" ref="apiSessionFactory" />
+		<property name="validationService" ref="validationService" />
+	</bean>
+
+	<bean id="creationService" class="net.etalia.crepuscolo.services.CreationServiceImpl"/>
+
+	<bean id="authService" class="net.etalia.crepuscolo.auth.AuthServiceImpl"/>
+
+	<bean id="checkerFactory" class="net.etalia.crepuscolo.check.CheckerFactory"/>
+	
+	<bean id="authCheck" class="net.etalia.crepuscolo.check.CheckAspect" factory-method="aspectOf">
+		<property name="authService" ref="authService"/>
+		<property name="checkerFactory" ref="checkerFactory"/>
+	</bean>
+
+	<bean id="serviceHack" class="net.etalia.crepuscolo.services.ServiceHack" factory-method="createNewInstance"/>
+
+	<aop:aspectj-autoproxy proxy-target-class="true">
+	</aop:aspectj-autoproxy>
+
+	<context:component-scan base-package="net.etalia.crepuscolo" />
+
+	<bean id="objectMapper" class="net.etalia.crepuscolo.json.CrepuscoloObjectMapper">
+		<property name="unroll" value="true"/>
+	</bean>
+
+	<bean id="jsonExceptions" class="net.etalia.crepuscolo.json.JsonHttpExceptionHandler"/>
+
+	<bean id="jaliaMessageConverter" class="net.etalia.jalia.spring.JaliaHttpMessageConverter">
+		<property name="objectMapper" ref="objectMapper"/>
+	</bean>
+
+	<bean id="authCheckMessageConverter" class="net.etalia.crepuscolo.auth.AuthCheckHttpMessageConverter"/>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean parent="jaliaMessageConverter"/>
+			<bean parent="authCheckMessageConverter"/>
+		</mvc:message-converters>
+		<mvc:argument-resolvers>
+			<bean class="net.etalia.crepuscolo.mvc.IdPathRequestBodyMethodProcessor">
+				<constructor-arg>
+					<list>
+						<ref bean="jaliaMessageConverter"/>
+						<ref bean="authCheckMessageConverter"/>
+					</list>
+				</constructor-arg>
+			</bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<mvc:interceptors>
+		<bean class="org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor">
+			<property name="sessionFactory">
+				<ref bean="apiSessionFactory"/>
+			</property>
+		</bean>
+	</mvc:interceptors>
+
+	<bean id="httpClientHelper" class="net.etalia.crepuscolo.mvc.httpclient.HttpClientHelper"/>
+
+	<bean id="httpClient" factory-bean="httpClientHelper" factory-method="createDefaultClient">
+		<constructor-arg>
+			<value>100</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>10000</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="acceptTestTokens" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass">
+			<value>net.etalia.crepuscolo.codec.Token</value>
+		</property>
+		<property name="targetMethod">
+			<value>acceptTestTokens</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<!-- TODO use configuration value here when they work again!! -->
+				<value>true</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000"/>
+	</bean>
+
+</beans>

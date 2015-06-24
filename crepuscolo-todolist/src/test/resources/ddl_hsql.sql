@@ -1,24 +1,4 @@
 
-    alter table task 
-        drop constraint FK_4fmjedju7b35tb5cr71n3ntb0;
-
-    alter table tasklist 
-        drop constraint FK_hodpdl33lpsx5jjf38j4rr3bi;
-
-    alter table tasklist_task 
-        drop constraint FK_fhqj3u6606a1nksxp5l3cu64;
-
-    alter table tasklist_task 
-        drop constraint FK_j470a8yyc7bbj46nriry3dfwu;
-
-    drop table task if exists;
-
-    drop table tasklist if exists;
-
-    drop table tasklist_task if exists;
-
-    drop table user if exists;
-
     create table task (
         id varchar(255) not null,
         version bigint not null,
@@ -52,12 +32,20 @@
         id varchar(255) not null,
         version bigint not null,
         creationDate bigint not null,
+        description varchar(255),
+        email varchar(255) not null,
         lastModified bigint not null,
+        password varchar(255) not null,
+        tokenSalt varchar(255) not null,
+        username varchar(255) not null,
         primary key (id)
     );
 
     alter table tasklist_task 
         add constraint UK_fhqj3u6606a1nksxp5l3cu64  unique (tasks_id);
+
+    alter table user 
+        add constraint UK_ob8kqyqqgmefl0aco34akdtpe  unique (email);
 
     alter table task 
         add constraint FK_4fmjedju7b35tb5cr71n3ntb0 

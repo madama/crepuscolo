@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+	<bean id="httpClientHelper" class="net.etalia.crepuscolo.mvc.httpclient.HttpClientHelper"/>
+
+	<bean id="httpClient" factory-bean="httpClientHelper" factory-method="createDefaultClient">
+		<constructor-arg>
+			<value>100</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>1000000</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="apiCaller" class="net.etalia.crepuscolo.mvc.httpclient.HttpClientCaller">
+		<constructor-arg>
+			<value>net.etalia.crepuscolo.todolist.controller.TodolistAPI</value>
+		</constructor-arg>
+		<property name="httpClient" ref="httpClient"/>
+		<property name="baseUrl" value="http://localhost:${embedWebPort}/"/>
+	</bean>
+
+	<bean id="schemaCreatorCaller" class="net.etalia.crepuscolo.mvc.httpclient.HttpClientCaller">
+		<constructor-arg>
+			<value>net.etalia.crepuscolo.test.db.SchemaCreator</value>
+		</constructor-arg>
+		<property name="httpClient" ref="httpClient"/>
+		<property name="baseUrl" value="http://localhost:${embedWebPort}/schema/"/>
+	</bean>
+
+	<bean id="objectMapper" class="net.etalia.crepuscolo.json.CrepuscoloObjectMapper"/>
+
+	<bean id="creationService" class="net.etalia.crepuscolo.services.CreationServiceImpl"/>
+
+</beans>
