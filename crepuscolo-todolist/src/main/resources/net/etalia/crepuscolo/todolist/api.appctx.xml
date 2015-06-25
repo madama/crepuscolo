@@ -21,7 +21,9 @@
 
 	<context:spring-configured/>
 
-	<context:property-placeholder location="classpath:/todolist.properties"/>
+	<bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:/todolist.properties" />
+	</bean>
 
 	<!-- STORAGE -->
 	<bean id="apiDataSource" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
