@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.etalia.crepuscolo.domain.Entities;
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.ID;
 import net.etalia.crepuscolo.utils.Check;
 
@@ -15,7 +15,7 @@ public class CreationServiceImpl implements CreationService {
 	private Map<Class<?>,Constructor<?>> constructors = new HashMap<Class<?>, Constructor<?>>();
 
 	@Override
-	public <T extends Entity> T newInstance(Class<T> clazz) {
+	public <T extends BaseEntity> T newInstance(Class<T> clazz) {
 		@SuppressWarnings("unchecked")
 		Constructor<T> constructor = (Constructor<T>) constructors.get(clazz);
 		if (constructor == null) {
@@ -36,13 +36,13 @@ public class CreationServiceImpl implements CreationService {
 	}
 
 	@Override
-	public void assignId(Entity obj) {
+	public void assignId(BaseEntity obj) {
 		obj.setId(ID.create(obj.getClass()).toString());
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends Entity> T getEmptyInstance(String id) {
+	public <T extends BaseEntity> T getEmptyInstance(String id) {
 		Class<T> type = Entities.getDomainClassByID(id);
 		Check.illegalargument.assertNotNull("Unknown type for prefix " + Entities.getPrefix(type) + " on id " + id, type);
 		T obj = newInstance(type);

@@ -20,8 +20,8 @@ import net.etalia.jalia.annotations.JsonSetter;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@JsonDefaultFields(value="id,title,extraData")
-public class Entity implements Jsonable {
+@JsonDefaultFields(value="id,extraData")
+public class BaseEntity implements Jsonable {
 
 	String id;
 	long version;
@@ -148,19 +148,19 @@ public class Entity implements Jsonable {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Entity)) {
+		if (!(obj instanceof BaseEntity)) {
 			return false;
 		}
-		if (getId() == null || ((Entity)obj).getId() == null) {
+		if (getId() == null || ((BaseEntity)obj).getId() == null) {
 			return false;
 		}
-		return getId().equals(((Entity)obj).getId());
+		return getId().equals(((BaseEntity)obj).getId());
 	}
 
 	@Override
 	public int hashCode() {
 		if (getId() == null) return super.hashCode();
-		return getId().hashCode() ^ Entity.class.hashCode();
+		return getId().hashCode() ^ BaseEntity.class.hashCode();
 	}
 
 }

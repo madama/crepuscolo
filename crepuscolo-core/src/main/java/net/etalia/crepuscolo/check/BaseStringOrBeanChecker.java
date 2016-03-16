@@ -1,7 +1,7 @@
 package net.etalia.crepuscolo.check;
 
 import net.etalia.crepuscolo.domain.Entities;
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.services.StorageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +22,20 @@ public abstract class BaseStringOrBeanChecker implements Checker {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T extends Entity> T convert(Object obj) {
+	protected <T extends BaseEntity> T convert(Object obj) {
 		if (obj == null) return null;
 		if (obj instanceof String) {
 			Class<T> type = Entities.getDomainClassByID((String) obj);
 			if (type == null) throw new IllegalArgumentException("Cannot find type for " + obj);
 			Class<?> clazz = type;
-			if (!(Entity.class.isAssignableFrom(clazz))) throw new IllegalArgumentException("Class " + clazz.getName() + " is not a subclass of Persistent, cannot be fetched");
+			if (!(BaseEntity.class.isAssignableFrom(clazz))) throw new IllegalArgumentException("Class " + clazz.getName() + " is not a subclass of Persistent, cannot be fetched");
 			return convert(((Class<T>)clazz), obj); 
 		}
 		return (T)obj;
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected <T extends Entity> T convert(Class<T> clazz, Object obj) {
+	protected <T extends BaseEntity> T convert(Class<T> clazz, Object obj) {
 		T ret = null;
 		if (obj == null) return null;
 		if (obj instanceof String) {
@@ -58,7 +58,7 @@ public abstract class BaseStringOrBeanChecker implements Checker {
 	protected String getIdOf(Object obj) {
 		if (obj == null) return null;
 		if (obj instanceof String) return (String)obj;
-		if (obj instanceof Entity) return ((Entity)obj).getId();
+		if (obj instanceof BaseEntity) return ((BaseEntity)obj).getId();
 		throw new IllegalArgumentException("Cannot extract an id from " + obj);
 	}
 	

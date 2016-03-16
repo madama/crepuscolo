@@ -16,12 +16,12 @@ public class ID {
 		return new ID(id);
 	}
 
-	public static ID create(Class<? extends Entity> clazz) {
+	public static ID create(Class<? extends BaseEntity> clazz) {
 		String id = innerIdCreate(clazz);
 		return new ID(id);
 	}
 
-	private static String innerIdCreate(Class<? extends Entity> clazz) {
+	private static String innerIdCreate(Class<? extends BaseEntity> clazz) {
 		String id = Entities.getPrefix(clazz) + UUID.randomUUID().toString();
 		return id;
 	}

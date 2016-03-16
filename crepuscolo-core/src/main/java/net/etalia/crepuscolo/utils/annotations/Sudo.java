@@ -15,7 +15,7 @@ import net.etalia.crepuscolo.domain.Authenticable;
  * despite prohibitions.
  * </p>
  * <p>
- * For example, it's prohibited by {@link EntityCheck} to call a {@link Entity} subclass
+ * For example, it's prohibited by {@link EntityCheck} to call a {@link BaseEntity} subclass
  * constructor directly. Now suppose a class like {@link Authenticable} has the following constructor :
  * <pre>
  *   public User(User another) {

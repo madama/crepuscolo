@@ -3,7 +3,7 @@ package net.etalia.crepuscolo.check;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.utils.SimpleCache;
 
 import org.aspectj.lang.JoinPoint;
@@ -18,9 +18,9 @@ public aspect CachingAspect {
 		key.append(tjp.getSignature().getDeclaringTypeName());
 		Object instance = tjp.getThis();
 		if (instance != null) {
-			if (instance instanceof Entity) {
+			if (instance instanceof BaseEntity) {
 				key.append('-');
-				key.append(((Entity) instance).getId());
+				key.append(((BaseEntity) instance).getId());
 			} else {
 				throw new IllegalStateException("Cannot cache instance method " + tjp + " because class is not a Persistent class");
 			}

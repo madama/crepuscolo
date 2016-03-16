@@ -8,7 +8,7 @@ public aspect EntityCheck {
 	// Check if Entity.setId() was called by a appropriate place
 	declare error :
 		!Pointcuts.withSudo()
-		&& call(* Entity+.setId(..))
+		&& call(* BaseEntity+.setId(..))
 		&& (!Pointcuts.insideDomain())
 		&& (!Pointcuts.insideTest())
 		&& !(within(CreationService+))
@@ -17,7 +17,7 @@ public aspect EntityCheck {
 
 	declare error : 
 		!Pointcuts.withSudo()
-		&& call(Entity+.new(..))
+		&& call(BaseEntity+.new(..))
 		&& (!Pointcuts.insideDomain())
 		&& (!Pointcuts.insideTest())
 		&& !(within(CreationService+))
@@ -26,9 +26,9 @@ public aspect EntityCheck {
 
 	declare warning :
 		(
-				call(Entity+.new(..))
+				call(BaseEntity+.new(..))
 				||
-				call(* Entity+.setId(..))
+				call(* BaseEntity+.setId(..))
 		)
 		&& Pointcuts.insideTest()
 		&& !Pointcuts.withSudo()

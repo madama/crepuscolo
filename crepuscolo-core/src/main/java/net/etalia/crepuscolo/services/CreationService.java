@@ -1,6 +1,6 @@
 package net.etalia.crepuscolo.services;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 
 
 public interface CreationService {
@@ -10,7 +10,7 @@ public interface CreationService {
 	 * @param clazz The domain class
 	 * @return The instance
 	 */
-	public <T extends Entity> T newInstance(Class<T> clazz);
+	public <T extends BaseEntity> T newInstance(Class<T> clazz);
 
 	/**
 	 * Return the instance for the given identifier without load it,
@@ -18,12 +18,12 @@ public interface CreationService {
 	 * @param id The identifier to set
 	 * @return The instance
 	 */
-	public <T extends Entity> T getEmptyInstance(String id);
+	public <T extends BaseEntity> T getEmptyInstance(String id);
 
 	/**
 	 * Generate and assign an ID to the given object
 	 * @param obj
 	 */
-	public void assignId(Entity obj);
+	public void assignId(BaseEntity obj);
 
 }
