@@ -35,4 +35,14 @@
 
 	<bean id="creationService" class="net.etalia.crepuscolo.services.CreationServiceImpl"/>
 
+	<!--bean id="schemaCreator" class="net.etalia.crepuscolo.test.db.HsqlSchemaCreator">
+		<property name="files">
+			<list>
+				<value>classpath:/ddl_hsql.sql</value>
+			</list>
+		</property>
+		<property name="datasource" ref="apiDataSource" />
+		<property name="prepareBefore" value="true" />
+	</bean-->
+
 </beans>

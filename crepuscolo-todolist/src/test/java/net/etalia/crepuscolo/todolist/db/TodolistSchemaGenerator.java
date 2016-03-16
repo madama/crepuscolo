@@ -10,6 +10,7 @@ public class TodolistSchemaGenerator extends SchemaGenerator {
 
 	public static void main(String[] args) throws Exception {
 		TodolistSchemaGenerator gen = new TodolistSchemaGenerator("net.etalia.crepuscolo.todolist.domain");
+		gen.setPath("src/main/resources/");
 		gen.generate(Dialect.HSQL);
 	}
 

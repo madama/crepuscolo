@@ -3,18 +3,26 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="todolist-api" version="3.0">
-	<display-name>todolist-api</display-name>
+	<display-name>todolist</display-name>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	<servlet>
-		<servlet-name>todolist-api</servlet-name>
+		<servlet-name>todolist</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>authcheck</servlet-name>
+		<servlet-class>net.etalia.crepuscolo.auth.AuthCheckServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
-		<servlet-name>todolist-api</servlet-name>
+		<servlet-name>todolist</servlet-name>
 		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>authcheck</servlet-name>
+		<url-pattern>/authcheck</url-pattern>
 	</servlet-mapping>
 	<filter>
 		<filter-name>charsetFilter</filter-name>
@@ -38,7 +46,7 @@
 	</filter>
 	<filter>
 		<filter-name>authFilter</filter-name>
-		<filter-class>net.etalia.auth.AuthFilter</filter-class>
+		<filter-class>net.etalia.crepuscolo.auth.AuthFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>charsetFilter</filter-name>

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import net.etalia.crepuscolo.check.Cache;
 import net.etalia.crepuscolo.check.ChSelf;
 import net.etalia.crepuscolo.domain.Authenticable;
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.Stored;
 import net.etalia.crepuscolo.validation.ValidationMessage;
 import net.etalia.jalia.annotations.JsonIgnore;
@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Length;
 
 @javax.persistence.Entity
 @Table(name="user")
-public class User extends Entity implements Authenticable, Stored {
+public class User extends BaseEntity implements Authenticable, Stored {
 
 	private String email;
 	private String username;

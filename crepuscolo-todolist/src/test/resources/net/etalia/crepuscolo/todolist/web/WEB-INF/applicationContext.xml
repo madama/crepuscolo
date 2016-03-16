@@ -11,7 +11,7 @@
 		<property name="location" value="classpath:/test.properties" />
 	</bean>
 
-	<bean id="schemaCreator" class="net.etalia.crepuscolo.test.db.HsqlSchemaCreator">
+	<!-- bean id="schemaCreator" class="net.etalia.crepuscolo.test.db.HsqlSchemaCreator">
 		<property name="files">
 			<list>
 				<value>classpath:/ddl_hsql.sql</value>
@@ -19,6 +19,6 @@
 		</property>
 		<property name="datasource" ref="apiDataSource" />
 		<property name="prepareBefore" value="true" />
-	</bean>
+	</bean-->
 
 </beans>

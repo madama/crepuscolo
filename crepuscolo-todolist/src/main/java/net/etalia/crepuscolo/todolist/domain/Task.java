@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.Stored;
 import net.etalia.crepuscolo.validation.ValidationMessage;
 
 @javax.persistence.Entity
 @Table(name="task")
-public class Task extends Entity implements Completable, Stored {
+public class Task extends BaseEntity implements Completable, Stored {
 
 	private User user;
 	private String name;
