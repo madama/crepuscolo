@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 
 import net.etalia.crepuscolo.check.CheckerFactory;
 import net.etalia.crepuscolo.domain.Entities;
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.services.CreationService;
 import net.etalia.crepuscolo.services.CreationServiceImpl;
 import net.etalia.crepuscolo.services.StorageService;
@@ -127,7 +127,7 @@ public class CrepuscoloObjectMapper extends ObjectMapper {
 				String id = (String) RequestContextHolder.getRequestAttributes().getAttribute("_ID_", RequestAttributes.SCOPE_REQUEST);
 				if (id != null) {
 					Class<?> clazz = Entities.getDomainClassByID(id);
-					pre = storageService.load((Class<Entity>)clazz, id);
+					pre = storageService.load((Class<BaseEntity>)clazz, id);
 					RequestContextHolder.getRequestAttributes().removeAttribute("_ID_", RequestAttributes.SCOPE_REQUEST);
 				}
 			}			

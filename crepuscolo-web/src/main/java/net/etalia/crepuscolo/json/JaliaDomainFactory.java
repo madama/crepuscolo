@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.etalia.crepuscolo.check.CheckerFactory;
 import net.etalia.crepuscolo.cleaning.BeanStringCleaner;
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.PaginationList;
 import net.etalia.crepuscolo.services.CreationService;
 import net.etalia.crepuscolo.services.CreationServiceImpl;
@@ -89,8 +89,8 @@ public class JaliaDomainFactory implements EntityNameProvider, EntityFactory, Js
 	 */
 	@Override
 	public String getId(Object entity, JsonContext context) {
-		if (entity instanceof Entity)
-			 return ((Entity) entity).getId();
+		if (entity instanceof BaseEntity)
+			 return ((BaseEntity) entity).getId();
 		JsonClassData jcd = getClassData(entity.getClass(), context);
 		if (jcd == null) return null;
 		Object value = jcd.getValue("id", entity, true);
@@ -104,12 +104,12 @@ public class JaliaDomainFactory implements EntityNameProvider, EntityFactory, Js
 	@Override
 	@SuppressWarnings("unchecked")
 	public Object buildEntity(Class<?> clazz, String id, JsonContext context) {
-		if (Entity.class.isAssignableFrom(clazz)) {
-			Entity ret = null;
+		if (BaseEntity.class.isAssignableFrom(clazz)) {
+			BaseEntity ret = null;
 			if (storageService != null && id != null)
-				ret = storageService.load((Class<? extends Entity>)clazz, id);
+				ret = storageService.load((Class<? extends BaseEntity>)clazz, id);
 			if (ret != null) return ret;
-			ret = creationService.newInstance((Class<? extends Entity>)clazz);
+			ret = creationService.newInstance((Class<? extends BaseEntity>)clazz);
 			if (id != null) ret.setId(id);
 			return ret;
 		}
@@ -138,9 +138,9 @@ public class JaliaDomainFactory implements EntityNameProvider, EntityFactory, Js
 				}
 			}
 		}
-		if (!serializing && !context.isRoot() && storageService != null && obj instanceof Entity) {
+		if (!serializing && !context.isRoot() && storageService != null && obj instanceof BaseEntity) {
 			if (!context.getFromStackBoolean(BeanJsonDeSer.REUSE_WITHOUT_ID)) {
-				if (storageService.isPersisted((Entity)obj)) {
+				if (storageService.isPersisted((BaseEntity)obj)) {
 					throw new DontModifyException(obj);
 				}
 			}

@@ -3,7 +3,7 @@ package net.etalia.crepuscolo.auth;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.services.CreationService;
 import net.etalia.crepuscolo.services.StorageService;
 
@@ -19,7 +19,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Configurable
-public class AuthCheckHttpMessageConverter extends AbstractHttpMessageConverter<Entity> {
+public class AuthCheckHttpMessageConverter extends AbstractHttpMessageConverter<BaseEntity> {
 
 	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");	
 	
@@ -48,8 +48,8 @@ public class AuthCheckHttpMessageConverter extends AbstractHttpMessageConverter<
 	}
 
 	@Override
-	protected Entity readInternal(Class<? extends Entity> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
-		if (!Entity.class.isAssignableFrom(clazz)) return null;
+	protected BaseEntity readInternal(Class<? extends BaseEntity> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+		if (!BaseEntity.class.isAssignableFrom(clazz)) return null;
 		String id = (String) RequestContextHolder.getRequestAttributes().getAttribute("_ID_", RequestAttributes.SCOPE_REQUEST);
 		if (id != null) {
 			RequestContextHolder.getRequestAttributes().removeAttribute("_ID_", RequestAttributes.SCOPE_REQUEST);
@@ -74,7 +74,7 @@ public class AuthCheckHttpMessageConverter extends AbstractHttpMessageConverter<
 	}
 
 	@Override
-	protected void writeInternal(Entity t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+	protected void writeInternal(BaseEntity t, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
 	}
 
 }
