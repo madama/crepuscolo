@@ -4,12 +4,12 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 
 public interface ValidationService {
 
-	public boolean isValid(Entity object, Class<?>... groups);
+	public boolean isValid(BaseEntity object, Class<?>... groups);
 
-	public Set<ConstraintViolation<Entity>> validate(Entity object, Class<?>... groups);
+	public Set<ConstraintViolation<BaseEntity>> validate(BaseEntity object, Class<?>... groups);
 
 }

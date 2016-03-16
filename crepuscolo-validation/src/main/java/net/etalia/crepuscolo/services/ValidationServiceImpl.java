@@ -7,7 +7,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 
 public class ValidationServiceImpl implements ValidationService {
 
@@ -19,12 +19,12 @@ public class ValidationServiceImpl implements ValidationService {
 	}
 
 	@Override
-	public boolean isValid(Entity object, Class<?>... groups) {
+	public boolean isValid(BaseEntity object, Class<?>... groups) {
 		return validate(object, groups).isEmpty();
 	}
 
 	@Override
-	public Set<ConstraintViolation<Entity>> validate(Entity object, Class<?>... groups) {
+	public Set<ConstraintViolation<BaseEntity>> validate(BaseEntity object, Class<?>... groups) {
 		return validator.validate(object, groups);
 	}
 
