@@ -8,14 +8,20 @@ import java.util.List;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 
+/**
+ * use:
+ * public static void main(String[] args) throws Exception {
+ *   SchemaGenerator gen = new SchemaGenerator("net.etalia.crepuscolo.domain");
+ *   gen.setPath("src/main/sql/");
+ *   gen.generate(Dialect.MYSQL5);
+ * }
+ * @author daniele
+ *
+ */
 public class SchemaGenerator {
 
 	private Configuration cfg;
-
-	public static void main(String[] args) throws Exception {
-		SchemaGenerator gen = new SchemaGenerator("net.etalia.crepuscolo.domain");
-		gen.generate(Dialect.MYSQL5);
-	}
+	private String path = "";
 
 	public SchemaGenerator(String packageName) throws Exception {
 		cfg = new Configuration();
@@ -25,16 +31,20 @@ public class SchemaGenerator {
 		}
 	}
 
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	/**
 	 * Method that actually creates the file.
 	 * 
 	 * @param dbDialect to use
 	 */
-	protected void generate(Dialect dialect) {
+	public void generate(Dialect dialect) {
 		cfg.setProperty("hibernate.dialect", dialect.getDialectClass());
 		SchemaExport export = new SchemaExport(cfg);
 		export.setDelimiter(";");
-		export.setOutputFile("ddl_" + dialect.name().toLowerCase() + ".sql");
+		export.setOutputFile(path + "ddl_" + dialect.name().toLowerCase() + ".sql");
 		export.execute(true, false, false, false);
 	}
 
@@ -83,9 +93,10 @@ public class SchemaGenerator {
 	/**
 	 * Holds the classnames of hibernate dialects for easy reference.
 	 */
-	protected static enum Dialect {
+	public static enum Dialect {
+		HSQL("org.hibernate.dialect.HSQLDialect"),
 		MYSQL5("org.hibernate.dialect.MySQL5InnoDBDialect"),
-		HSQL("org.hibernate.dialect.HSQLDialect");
+		MYSQL57("org.hibernate.dialect.MySQL57InnoDBDialect");
 		private String dialectClass;
 		private Dialect(String dialectClass) {
 			this.dialectClass = dialectClass;
