@@ -6,15 +6,17 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 
-import net.etalia.crepuscolo.domain.Entity;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.services.StorageService;
 import net.etalia.crepuscolo.services.ValidationFailedException;
 import net.etalia.crepuscolo.services.ValidationService;
 import net.etalia.crepuscolo.utils.ChainMap;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.EntityEntry;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,13 +29,24 @@ public class HibernateStorageServiceImpl implements StorageService {
 
 	@Transactional
 	@Override
-	public <T extends Entity> T load(Class<T> clz, String id) {
+	public <T extends BaseEntity> T load(Class<T> clz, String id) {
 		return (T) getCurrentSession().get(clz, id);
 	}
 
 	@Transactional
 	@Override
-	public <T extends Entity> T load(String query, Map<String, ?> criteria) {
+	public <T extends BaseEntity> T load(Class<T> clz, Map<String, ?> andCriteria) {
+		Criteria criteria = getCurrentSession().createCriteria(clz);
+		for (String k : andCriteria.keySet()) {
+			criteria.add(Restrictions.and(Restrictions.eq(k, andCriteria.get(k))));
+		}
+		return (T) criteria.uniqueResult();
+	}
+
+
+	@Transactional
+	@Override
+	public <T extends BaseEntity> T load(String query, Map<String, ?> criteria) {
 		Query q = getCurrentSession().createQuery(query);
 		setParameters(criteria, q);
 		return (T) q.uniqueResult();
@@ -41,7 +54,7 @@ public class HibernateStorageServiceImpl implements StorageService {
 
 	@Transactional(readOnly=true,propagation=Propagation.REQUIRES_NEW)
 	@Override
-	public final <T extends Entity> T loadStored(Class<T> clz, String id) {
+	public final <T extends BaseEntity> T loadStored(Class<T> clz, String id) {
 		return (T) getCurrentSession().get(clz, id);
 	}
 
@@ -63,14 +76,14 @@ public class HibernateStorageServiceImpl implements StorageService {
 
 	@Transactional(noRollbackFor={ValidationFailedException.class})
 	@Override
-	public <T extends Entity> T save(T obj) {
+	public <T extends BaseEntity> T save(T obj) {
 		return save(obj, false);
 	}
 
 	@Transactional(noRollbackFor={ValidationFailedException.class})
 	@Override
-	public <T extends Entity> T save(T obj, boolean andFlush) {
-		Set<ConstraintViolation<Entity>> violations = validation.validate(obj);
+	public <T extends BaseEntity> T save(T obj, boolean andFlush) {
+		Set<ConstraintViolation<BaseEntity>> violations = validation.validate(obj);
 		if (!violations.isEmpty()) {
 			throw new ValidationFailedException(violations);
 		}
@@ -81,19 +94,19 @@ public class HibernateStorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public <T extends Entity> List<T> list(String query,Map<String,?> criteria) {
+	public <T extends BaseEntity> List<T> list(String query,Map<String,?> criteria) {
 		return list(query, criteria, null, null);
 	}
 
 	@Override
-	public <T extends Entity> List<T> list(String query) {
+	public <T extends BaseEntity> List<T> list(String query) {
 		return list(query, null, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Transactional(propagation=Propagation.SUPPORTS)
 	@Override
-	public <T extends Entity> List<T> list(String query, Map<String, ?> criteria, Integer offset, Integer length) {
+	public <T extends BaseEntity> List<T> list(String query, Map<String, ?> criteria, Integer offset, Integer length) {
 		Query q = getCurrentSession().createQuery(query);
 		if (criteria != null)
 			setParameters(criteria, q);
@@ -105,12 +118,12 @@ public class HibernateStorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public void delete(Entity obj) {
+	public void delete(BaseEntity obj) {
 		getCurrentSession().delete(obj);
 	}
 
 	@Override
-	public <T extends Entity> boolean delete(Class<T> clazz, String id) {
+	public <T extends BaseEntity> boolean delete(Class<T> clazz, String id) {
 		Query q = getCurrentSession().createQuery("DELETE " + clazz.getName() + " WHERE id=:id");
 		setParameters(new ChainMap<String>("id", id), q);
 		return q.executeUpdate() != 0;
@@ -177,7 +190,7 @@ public class HibernateStorageServiceImpl implements StorageService {
 	}
 
 	@Override
-	public boolean isPersisted(Entity object) {
+	public boolean isPersisted(BaseEntity object) {
 		EntityEntry entry = ((SessionImplementor)getCurrentSession()).getPersistenceContext().getEntry(object);
 		if (entry == null) return false;
 		return entry.isExistsInDatabase();
