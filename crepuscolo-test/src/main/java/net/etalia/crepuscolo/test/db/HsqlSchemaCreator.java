@@ -18,7 +18,7 @@ public class HsqlSchemaCreator extends BaseSchemaCreator {
 	private boolean dropSchema = true;
 
 	@Override
-	@RequestMapping(value = "/recreate", method = RequestMethod.POST)	
+	@RequestMapping(value = "/recreate", method = RequestMethod.POST)
 	public @ResponseStatus(HttpStatus.NO_CONTENT) void recreateSchema() throws SQLException, IOException {
 		Connection connection = datasource.getConnection();
 		if (dropSchema) {

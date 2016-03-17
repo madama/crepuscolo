@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 /**
  * MySql specific implementation of {@link SchemaCreator}. It supports dropping and recreating
  * the entire database before executing the DDL files, so that if the DDL does not contain DROP TABLE
@@ -13,12 +17,15 @@ import java.sql.Statement;
  * @author Simone Gianni <simoneg@apache.org>
  *
  */
+@Controller
+@RequestMapping(value="/schema")
 public class MysqlSchemaCreator extends BaseSchemaCreator{
 
 	private String dbname;
 	private boolean dropDb = false;
 
 	@Override
+	@RequestMapping(value = "/recreate", method = RequestMethod.POST)
 	public void recreateSchema() throws SQLException, IOException {
 		Connection connection = datasource.getConnection();
 		if (dropDb) {

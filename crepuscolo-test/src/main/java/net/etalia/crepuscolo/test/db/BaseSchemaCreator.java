@@ -19,10 +19,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Basic implementation of {@link SchemaCreator}, that works using a {@link DataSource} and DDL text (sql) files.
@@ -59,8 +55,7 @@ public class BaseSchemaCreator implements SchemaCreator, ApplicationContextAware
 	 * Default implementation, simply executes the files on a connection obtained from the {@link DataSource},
 	 * using {@link #executeFiles(Connection, String)} and the default SQL delimiter ";".  
 	 */
-	@RequestMapping(value = "/recreate", method = RequestMethod.POST)	
-	public @ResponseStatus(HttpStatus.NO_CONTENT) void recreateSchema() throws SQLException, IOException {
+	public void recreateSchema() throws SQLException, IOException {
 		Connection connection = datasource.getConnection();
 		try {
 			executeFiles(connection, ";");
