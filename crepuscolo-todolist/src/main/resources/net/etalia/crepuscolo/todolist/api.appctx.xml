@@ -99,7 +99,7 @@
 	<aop:aspectj-autoproxy proxy-target-class="true">
 	</aop:aspectj-autoproxy>
 
-	<context:component-scan base-package="net.etalia.crepuscolo" />
+	<context:component-scan base-package="net.etalia.crepuscolo.todolist" />
 
 	<bean id="objectMapper" class="net.etalia.crepuscolo.json.CrepuscoloObjectMapper">
 		<property name="unroll" value="true"/>
