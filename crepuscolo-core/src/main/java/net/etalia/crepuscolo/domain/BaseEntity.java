@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import javax.persistence.Version;
@@ -19,7 +17,6 @@ import net.etalia.jalia.annotations.JsonIgnore;
 import net.etalia.jalia.annotations.JsonSetter;
 
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonDefaultFields(value="id,extraData")
 public class BaseEntity implements Jsonable {
 
