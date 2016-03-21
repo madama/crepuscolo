@@ -233,8 +233,12 @@
 
   <repositories>
     <repository>
-      <id>repo.danysoft.org</id>
-      <url>s3://repo.danysoft.org.s3-website-eu-west-1.amazonaws.com/release</url>
+      <id>repo.danysoft.org-release</id>
+      <url>http://repo.danysoft.org.s3-website-eu-west-1.amazonaws.com/release</url>
+    </repository>
+    <repository>
+      <id>repo.danysoft.org-snapshot</id>
+      <url>http://repo.danysoft.org.s3-website-eu-west-1.amazonaws.com/snapshot</url>
     </repository>
   </repositories>
 
