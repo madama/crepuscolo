@@ -232,7 +232,22 @@
   </developers>
 
   <repositories>
+    <repository>
+      <id>repo.danysoft.org</id>
+      <url>s3://repo.danysoft.org.s3-website-eu-west-1.amazonaws.com/release</url>
+    </repository>
   </repositories>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>repo.danysoft.org</id>
+      <url>s3://repo.danysoft.org/snapshot</url>
+    </snapshotRepository>
+    <repository>
+      <id>repo.danysoft.org</id>
+      <url>s3://repo.danysoft.org/release</url>
+    </repository>
+  </distributionManagement>
 
   <build>
     <pluginManagement>
