@@ -13,7 +13,7 @@
     <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
     <jvm.target>1.7</jvm.target>
     <crepuscolo.version>0.2.0-SNAPSHOT</crepuscolo.version>
-    <aspectj.v>1.7.4</aspectj.v>
+    <aspectj.v>1.8.2</aspectj.v>
     <hibernate.v>4.3.11.Final</hibernate.v>
     <spring.v>4.2.5.RELEASE</spring.v>
   </properties>
