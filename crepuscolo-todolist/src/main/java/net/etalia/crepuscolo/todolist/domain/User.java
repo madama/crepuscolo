@@ -3,6 +3,7 @@ package net.etalia.crepuscolo.todolist.domain;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import net.etalia.jalia.annotations.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
-@javax.persistence.Entity
+@Entity
 @Table(name="user")
 public class User extends BaseEntity implements Authenticable, Stored {
 
