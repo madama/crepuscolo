@@ -3,6 +3,7 @@ package net.etalia.crepuscolo.todolist.domain;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -14,7 +15,7 @@ import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.Stored;
 import net.etalia.crepuscolo.validation.ValidationMessage;
 
-@javax.persistence.Entity
+@Entity
 @Table(name="tasklist")
 public class TaskList extends BaseEntity implements Completable, Stored {
 
