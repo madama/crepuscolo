@@ -48,7 +48,8 @@ import net.etalia.crepuscolo.utils.Strings;
  */
 public class AuthData {
 
-	private static final String STATIC_SALT = "STSALT";
+	public static String STATIC_SALT;
+	public static String AUTHENTICATION_SIGN;
 
 	protected final static Logger log = Logger.getLogger(AuthData.class.getName());
 
@@ -78,7 +79,7 @@ public class AuthData {
 		log.log(Level.FINE, "Authenticating with {} validPort:{} https:{}", new Object[] { header, validPort, https});
 		if (header != null) {
 			this.currentToken = header;
-			if (header.startsWith("Etalia ")) header = header.substring(7);
+			if (header.startsWith(AUTHENTICATION_SIGN + " ")) header = header.substring(7);
 			TokenReader parser = Token.parse(header);
 			incoming.put(Fields.UserId.fname, Strings.nullIfBlank(parser.getString()));
 			incoming.put(Fields.TimeStamp.fname, parser.getLong());
@@ -143,11 +144,10 @@ public class AuthData {
 		return ts * 1000;
 	}
 
-	public static String produce(String userId, String profileId, String userPassword, String systemId) {
-		return "Crepuscolo " + 
+	public static String produce(String userId, String userPassword, String systemId) {
+		return AUTHENTICATION_SIGN + " " + 
 		Token.create()
 		.addString(userId)
-		.addString(profileId)
 		.addLong(System.currentTimeMillis() / 1000)
 		.addString(systemId)
 		.addString(userPassword)
@@ -156,16 +156,12 @@ public class AuthData {
 	}
 
 	public static String produceForUser(String userId, String userPassword) {
-		return produce(userId, "", userPassword, "");
-	}
-
-	public static String produceForUserAndProfile(String userId, String profileId, String userPassword) {
-		return produce(userId, profileId, userPassword, "");
+		return produce(userId, userPassword, "");
 	}
 
 	public static String produceForSystem(String systemId, String asUserId) {
 		if (asUserId == null) asUserId = "";
-		return produce(asUserId, "", "", systemId);
+		return produce(asUserId, "", systemId);
 	}
 
 	public String getCurrentToken() {
