@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="crepuscolo-test-api" version="2.5">
+	<display-name>mockServices</display-name>
+	<servlet>
+		<servlet-name>authcheck</servlet-name>
+		<servlet-class>net.etalia.crepuscolo.auth.AuthCheckServlet</servlet-class>
+	</servlet>
+	<filter>
+		<filter-name>charsetFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>JSONParametersFilter</filter-name>
+		<filter-class>net.etalia.jalia.spring.JaliaParametersFilter</filter-class>
+		<init-param>
+			<param-name>parameterName</param-name>
+			<param-value>outProperties</param-value>
+		</init-param>
+	</filter>
+	<filter>
+		<filter-name>RetryFilter</filter-name>
+		<filter-class>net.etalia.crepuscolo.mvc.RetryFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>charsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>RetryFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>JSONParametersFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>authcheck</servlet-name>
+		<url-pattern>/authcheck</url-pattern>
+	</servlet-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+</web-app>
