@@ -10,7 +10,7 @@ public class ChSelfChecker extends BaseStringOrBeanChecker {
 	public int check(CheckPoint p) {
 		Object obj = p.getInstance();
 		String checkId = getIdOf(obj);
-		String userId = p.getAutheticableId(Verification.NONE);
+		String userId = p.getAuthenticableId(Verification.NONE);
 		if (checkId == null || userId == null) return 403;
 		return checkId.equals(userId) ? 0 : 403;
 	}

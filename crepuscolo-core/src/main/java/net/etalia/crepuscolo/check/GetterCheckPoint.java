@@ -30,13 +30,13 @@ public class GetterCheckPoint implements CheckPoint {
 	}
 
 	@Override
-	public String getAutheticableId(Verification level) {
+	public String getAuthenticableId(Verification level) {
 		if (CheckAspect.aspectOf().isNullAuth()) return null;
 		return authService.getPrincipalUserId(level);
 	}
 
 	@Override
-	public Authenticable getUser(Verification level) {
+	public Authenticable getAuthenticable(Verification level) {
 		if (CheckAspect.aspectOf().isNullAuth()) return null;
 		return authService.getPrincipalUser(level);
 	}

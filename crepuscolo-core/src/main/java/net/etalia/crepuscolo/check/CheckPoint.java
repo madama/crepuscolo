@@ -18,7 +18,7 @@ public interface CheckPoint {
 	 * @param level The verification level checks to perform.
 	 * @return The user id, or null if no user is logged.
 	 */
-	public String getAutheticableId(Verification level);
+	public String getAuthenticableId(Verification level);
 
 	/**
 	 * Retrieves the current {@link Authenticable}, checking with the given {@link Verification} level.
@@ -26,7 +26,7 @@ public interface CheckPoint {
 	 * @param level The verification level checks to perform.
 	 * @return The {@link Authenticable}, or null is no user is logged.
 	 */
-	public Authenticable getUser(Verification level);
+	public Authenticable getAuthenticable(Verification level);
 
 	/**
 	 * Retrieves the current instance the check is being performed on.

@@ -66,14 +66,14 @@ public aspect CheckAspect {
 	
 		@Override
 		@Transactional(propagation=Propagation.REQUIRES_NEW)
-		public String getAutheticableId(Verification level) {
+		public String getAuthenticableId(Verification level) {
 			if (nullAuth.get() == Boolean.TRUE) return null;
 			return authService.getPrincipalUserId(level);
 		}
 		
 		@Override
 		@Transactional(propagation=Propagation.REQUIRES_NEW)
-		public Authenticable getUser(Verification level) {
+		public Authenticable getAuthenticable(Verification level) {
 			if (nullAuth.get() == Boolean.TRUE) return null;
 			return authService.getPrincipalUser(level);
 		}

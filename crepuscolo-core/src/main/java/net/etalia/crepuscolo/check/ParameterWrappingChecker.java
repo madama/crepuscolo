@@ -55,13 +55,13 @@ public class ParameterWrappingChecker implements Checker {
 		}
 
 		@Override
-		public String getAutheticableId(Verification level) {
-			return delegate.getAutheticableId(level);
+		public String getAuthenticableId(Verification level) {
+			return delegate.getAuthenticableId(level);
 		}
 
 		@Override
-		public Authenticable getUser(Verification level) {
-			return delegate.getUser(level);
+		public Authenticable getAuthenticable(Verification level) {
+			return delegate.getAuthenticable(level);
 		}
 
 		@Override
