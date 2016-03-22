@@ -130,7 +130,7 @@ public class CrepuscoloObjectMapper extends ObjectMapper {
 					pre = storageService.load((Class<BaseEntity>)clazz, id);
 					RequestContextHolder.getRequestAttributes().removeAttribute("_ID_", RequestAttributes.SCOPE_REQUEST);
 				}
-			}			
+			}
 		}
 		return super.readValue(jsonIn, pre, hint);
 	}
