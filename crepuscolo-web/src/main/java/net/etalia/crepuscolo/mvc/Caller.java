@@ -174,7 +174,7 @@ public abstract class Caller<Serv> {
 				} else if (ann instanceof RequestParam) {
 					String paramName = ((RequestParam) ann).value();
 					call.setParameter(paramName, inv.getArgument(paramCnt++));
-				} else if (ann instanceof RequestBody) {
+				} else if (ann instanceof RequestBody || ann instanceof IdPathRequestBody) {
 					call.setBody(inv.getArgument(paramCnt++));
 				} else if (ann instanceof RequestHeader) {
 					String headerName = ((RequestHeader)ann).value();
