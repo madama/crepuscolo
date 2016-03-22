@@ -79,7 +79,7 @@ public class CrepuscoloObjectMapper extends ObjectMapper {
 	
 	
 	/**
-	 * Perform default Etalia configuration
+	 * Perform default configuration
 	 */
 	@Override
 	@PostConstruct

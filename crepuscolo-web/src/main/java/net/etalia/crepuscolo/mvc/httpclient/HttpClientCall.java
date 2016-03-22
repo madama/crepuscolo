@@ -46,6 +46,8 @@ public class HttpClientCall<X> extends Call<X> {
 
 	protected final static Logger log = Logger.getLogger(HttpClientCall.class.getName());
 
+	public String fieldsParameter = "outProperties";
+
 	@SuppressWarnings("rawtypes")
 	private HttpClientCaller caller;
 
@@ -53,6 +55,13 @@ public class HttpClientCall<X> extends Call<X> {
 	public HttpClientCall(HttpClientCaller caller, Type type, HttpMethod method, String path) {
 		super(type, method, path);
 		this.caller = caller;
+	}
+
+	@SuppressWarnings("rawtypes")
+	public HttpClientCall(HttpClientCaller caller, Type type, HttpMethod method, String path, String fieldsParameter) {
+		super(type, method, path);
+		this.caller = caller;
+		this.fieldsParameter = fieldsParameter;
 	}
 
 	@Override
@@ -74,7 +83,7 @@ public class HttpClientCall<X> extends Call<X> {
 		if (hasFields()) {
 			// Always add requested fields as a parameter
 			// TODO we should optimize this later, using sets or whatever
-			ub.addParameter("outProperties", getFieldsAsString());
+			ub.addParameter(fieldsParameter, getFieldsAsString());
 		}
 		
 		if (super.method == HttpMethod.GET || super.method == HttpMethod.DELETE) {

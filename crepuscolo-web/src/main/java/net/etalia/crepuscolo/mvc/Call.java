@@ -214,7 +214,7 @@ public abstract class Call<Ret> {
 		} else if (userId != null) {
 			setHeader("Authorization", AuthData.produceForUser(userId, "abc"));
 		} else if (AuthFilter.getAuthData().getCurrentToken() != null) {
-			setHeader("Authorization", "Etalia " + AuthFilter.getAuthData().getCurrentToken());
+			setHeader("Authorization", AuthData.AUTHENTICATION_SIGN + " " + AuthFilter.getAuthData().getCurrentToken());
 		}
 	}
 
@@ -225,7 +225,7 @@ public abstract class Call<Ret> {
 	}
 
 	public Call<Ret> authAsToken(String token) {
-		setHeader("Authorization", "Etalia " + token);
+		setHeader("Authorization", AuthData.AUTHENTICATION_SIGN + " " + token);
 		return this;
 	}
 

@@ -11,6 +11,15 @@ public class HttpClientCaller<Serv> extends Caller<Serv> {
 
 	protected HttpClient httpClient;
 	protected String baseUrl;
+	protected String fieldsParameter;
+
+	public String getFieldsParameter() {
+		return fieldsParameter;
+	}
+
+	public void setFieldsParameter(String fieldsParameter) {
+		this.fieldsParameter = fieldsParameter;
+	}
 
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
@@ -39,7 +48,11 @@ public class HttpClientCaller<Serv> extends Caller<Serv> {
 
 	@Override
 	protected <X> Call<X> createCall(Type type, HttpMethod method, String path) {
-		return new HttpClientCall<X>(this, type, method, path);
+		if (fieldsParameter == null) {
+			return new HttpClientCall<X>(this, type, method, path);
+		} else {
+			return new HttpClientCall<X>(this, type, method, path, fieldsParameter);
+		}
 	}
 
 }

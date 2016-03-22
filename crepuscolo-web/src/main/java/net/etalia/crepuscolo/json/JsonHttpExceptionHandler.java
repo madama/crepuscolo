@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.etalia.crepuscolo.auth.AuthData;
 import net.etalia.crepuscolo.check.AuthException;
 import net.etalia.crepuscolo.utils.ChainMap;
 import net.etalia.crepuscolo.utils.HttpException;
@@ -60,7 +61,7 @@ public class JsonHttpExceptionHandler implements HandlerExceptionResolver, Order
 			}
 
 			if (statusCode == 401) {
-				response.setHeader("WWW-Authenticate", "Etalia realm=\"application\"");
+				response.setHeader("WWW-Authenticate", AuthData.AUTHENTICATION_SIGN + " realm=\"application\"");
 			}
 			if (!StringUtils.hasLength(reason)) {
 				response.setStatus(statusCode);

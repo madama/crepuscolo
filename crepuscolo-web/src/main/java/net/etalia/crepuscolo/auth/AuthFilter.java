@@ -25,7 +25,7 @@ public class AuthFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		guestAuth = filterConfig.getInitParameter("guestAuth");
 		if (guestAuth == null) guestAuth = "__GUEST__";
-		guestAuth = "Etalia " + guestAuth;
+		guestAuth = AuthData.AUTHENTICATION_SIGN + " " + guestAuth;
 		
 		String ports = filterConfig.getInitParameter("securePorts");
 		if (ports != null) {
@@ -60,13 +60,13 @@ public class AuthFilter implements Filter {
 		try {
 			// Get the auth header
 			String auth = hrequest.getHeader("Authorization");
-			// If it exists and starts with "Etalia " then it's our 
-			if (auth != null && !auth.equals(guestAuth) && auth.startsWith("Crepuscolo ")) {
+			// If it exists and starts with AuthData.AUTHENTICATION_SIGN then it's our 
+			if (auth != null && !auth.equals(guestAuth) && auth.startsWith(AuthData.AUTHENTICATION_SIGN + " ")) {
 				// Save the token
 				
 				
-				// Remove "Etalia "
-				auth = auth.substring("Etalia ".length());
+				// Remove AuthData.AUTHENTICATION_SIGN
+				auth = auth.substring((AuthData.AUTHENTICATION_SIGN + " ").length());
 
 				// Check ports
 				int localPort = request.getLocalPort();
