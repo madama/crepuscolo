@@ -53,6 +53,7 @@ public abstract class Call<Ret> {
 			BitSet bs = new BitSet(600);
 			bs.set(200,205);
 			DEFAULT_ACCEPTS.put(HttpMethod.PUT, bs);
+			DEFAULT_ACCEPTS.put(HttpMethod.PATCH, bs);
 			DEFAULT_ACCEPTS.put(HttpMethod.DELETE, bs);
 		}
 		{

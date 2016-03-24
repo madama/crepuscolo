@@ -33,6 +33,7 @@ public abstract class Caller<Serv> {
 	public static enum HttpMethod {
 		GET,
 		PUT,
+		PATCH,
 		POST,
 		DELETE
 	}

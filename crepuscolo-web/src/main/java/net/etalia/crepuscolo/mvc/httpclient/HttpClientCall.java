@@ -33,6 +33,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -101,7 +102,7 @@ public class HttpClientCall<X> extends Call<X> {
 			} else {
 				message = new HttpDelete(uri);
 			}
-		} else if (super.method == HttpMethod.POST || super.method == HttpMethod.PUT) {
+		} else if (super.method == HttpMethod.POST || super.method == HttpMethod.PUT || super.method == HttpMethod.PATCH) {
 			//Check.illegalstate.assertFalse("Cannot send both parameters and a body in a POST or PUT", hasParameters() && hasBody());
 			byte[] payload = null;
 			if (hasParameters() && !hasBody()) {
@@ -146,10 +147,16 @@ public class HttpClientCall<X> extends Call<X> {
 				HttpPost post = new HttpPost(uri);
 				post.setEntity(entity);
 				message = post;
-			} else {
+			} else if (super.method == HttpMethod.PUT) {
 				HttpPut put = new HttpPut(uri);
 				put.setEntity(entity);
 				message = put;
+			} else if (super.method == HttpMethod.PATCH) {
+				HttpPatch patch = new HttpPatch();
+				patch.setEntity(entity);
+				message = patch;
+			} else {
+				throw new IllegalStateException("Wrong HttpMethod: " + super.method);
 			}
 			
 			if (hasBody()) {
