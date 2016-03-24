@@ -152,7 +152,7 @@ public class HttpClientCall<X> extends Call<X> {
 				put.setEntity(entity);
 				message = put;
 			} else if (super.method == HttpMethod.PATCH) {
-				HttpPatch patch = new HttpPatch();
+				HttpPatch patch = new HttpPatch(uri);
 				patch.setEntity(entity);
 				message = patch;
 			} else {
