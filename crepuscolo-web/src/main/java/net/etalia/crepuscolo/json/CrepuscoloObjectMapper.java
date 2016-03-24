@@ -38,7 +38,7 @@ public class CrepuscoloObjectMapper extends ObjectMapper {
 		JaliaDomainFactory factory = new JaliaDomainFactory();
 		super.setEntityFactory(factory);
 		super.setEntityNameProvider(factory);
-		super.setClassDataFactory(factory);		
+		super.setClassDataFactory(factory);
 	}
 	
 	public void setClient(boolean client) {
