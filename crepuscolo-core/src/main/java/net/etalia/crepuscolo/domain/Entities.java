@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 public class Entities {
 
 	private static Map<String, Class<? extends BaseEntity>> classes = new HashMap<String, Class<? extends BaseEntity>>();
+	private static Map<String, Class<? extends BaseEntity>[]> extendedClasses = new HashMap<String, Class<? extends BaseEntity>[]>();
 	private static int prefixLength = 1;
 
 	private Entities() {
@@ -22,6 +23,13 @@ public class Entities {
 			throw new IllegalArgumentException("Prefix length is not valid.");
 		}
 		classes.put(prefix, clazz);
+	}
+
+	public static void add(String prefix, Class<? extends BaseEntity>[] classes) {
+		if (prefix.trim().length() != prefixLength) {
+			throw new IllegalArgumentException("Prefix length is not valid.");
+		}
+		extendedClasses.put(prefix, classes);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -44,9 +52,19 @@ public class Entities {
 	public static String getPrefix(Class<? extends BaseEntity> clazz) {
 		String prefix = null;
 		for (Entry<String, Class<? extends BaseEntity>> entry : classes.entrySet()) {
-			if (entry.getValue() == clazz) {
+			if (entry.getValue() == clazz ) {
 				prefix = entry.getKey();
 				break;
+			}
+		}
+		if (prefix == null) {
+			for (Entry<String, Class<? extends BaseEntity>[]> entry : extendedClasses.entrySet()) {
+				for (Class<? extends BaseEntity> extendedClass : entry.getValue()) {
+					if (extendedClass == clazz) {
+						prefix = entry.getKey();
+						break;
+					}
+				}
 			}
 		}
 		if (prefix == null) {
