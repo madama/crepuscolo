@@ -1,13 +1,13 @@
 package net.etalia.crepuscolo.domain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Entities {
 
-	private static Map<String, Class<? extends BaseEntity>> classes = new HashMap<String, Class<? extends BaseEntity>>();
-	private static Map<String, Class<? extends BaseEntity>[]> extendedClasses = new HashMap<String, Class<? extends BaseEntity>[]>();
+	private static Map<String, Class<? extends BaseEntity>[]> classes = new HashMap<String, Class<? extends BaseEntity>[]>();
 	private static int prefixLength = 1;
 
 	private Entities() {
@@ -18,18 +18,18 @@ public class Entities {
 		prefixLength = length;
 	}
 
-	public static void add(String prefix, Class<? extends BaseEntity> clazz) {
+	public static void add(String prefix, Class<? extends BaseEntity> mainClazz,Class<? extends BaseEntity>... otherClasses) {
 		if (prefix.trim().length() != prefixLength) {
 			throw new IllegalArgumentException("Prefix length is not valid.");
 		}
-		classes.put(prefix, clazz);
-	}
-
-	public static void add(String prefix, Class<? extends BaseEntity>[] classes) {
-		if (prefix.trim().length() != prefixLength) {
-			throw new IllegalArgumentException("Prefix length is not valid.");
+		if (otherClasses.length > 0) { 
+			Class<? extends BaseEntity>[] lst = new Class[otherClasses.length + 1];
+			lst[0] = mainClazz;
+			System.arraycopy(otherClasses, 0, lst, 1, otherClasses.length);
+			classes.put(prefix, lst);
+		} else {
+			classes.put(prefix, new Class[] {mainClazz});
 		}
-		extendedClasses.put(prefix, classes);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -42,7 +42,7 @@ public class Entities {
 		if (prefix.trim().length() != prefixLength) {
 			throw new IllegalArgumentException("Prefix length is not valid.");
 		}
-		return (Class<T>) classes.get(prefix);
+		return (Class<T>) classes.get(prefix)[0];
 	}
 
 	public static <T extends BaseEntity> Class<T> getDomainClassByID(String id) {
@@ -51,19 +51,11 @@ public class Entities {
 
 	public static String getPrefix(Class<? extends BaseEntity> clazz) {
 		String prefix = null;
-		for (Entry<String, Class<? extends BaseEntity>> entry : classes.entrySet()) {
-			if (entry.getValue() == clazz ) {
-				prefix = entry.getKey();
-				break;
-			}
-		}
-		if (prefix == null) {
-			for (Entry<String, Class<? extends BaseEntity>[]> entry : extendedClasses.entrySet()) {
-				for (Class<? extends BaseEntity> extendedClass : entry.getValue()) {
-					if (extendedClass == clazz) {
-						prefix = entry.getKey();
-						break;
-					}
+		for (Entry<String, Class<? extends BaseEntity>[]> entry : classes.entrySet()) {
+			for (Class<? extends BaseEntity> extendedClass : entry.getValue()) {
+				if (extendedClass == clazz) {
+					prefix = entry.getKey();
+					break;
 				}
 			}
 		}
