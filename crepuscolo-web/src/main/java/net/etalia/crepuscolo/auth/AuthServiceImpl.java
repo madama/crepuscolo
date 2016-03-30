@@ -7,11 +7,13 @@ import java.util.logging.Logger;
 import net.etalia.crepuscolo.codec.Base64Codec;
 import net.etalia.crepuscolo.codec.Digester;
 import net.etalia.crepuscolo.domain.Authenticable;
+import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.services.AuthService;
 import net.etalia.crepuscolo.services.StorageService;
 import net.etalia.crepuscolo.utils.HttpException;
 import net.etalia.crepuscolo.utils.Strings;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,11 @@ public class AuthServiceImpl implements AuthService {
 	private final static Logger log = Logger.getLogger(AuthServiceImpl.class.getName());
 
 	@Autowired(required=false)
-	private StorageService storage;
+	private StorageService storageService;
 
 	private SecureRandom secureRandom = new SecureRandom();
+
+	private Class<? extends BaseEntity> userClass;
 
 	/**
 	 * Max time (in millis) for normal tokens
@@ -34,6 +38,13 @@ public class AuthServiceImpl implements AuthService {
 
 	public void setMaxTokenTime(long maxTokenTime) {
 		this.maxTokenTime = maxTokenTime;
+	}
+
+	public void setUserClass(Class<? extends BaseEntity> userClass) {
+		if (!ArrayUtils.contains(userClass.getInterfaces(), Authenticable.class)) {
+			throw new IllegalArgumentException("Given class does not implements Authenticable!");
+		}
+		this.userClass = userClass;
 	}
 
 	protected AuthData getAuthData() {
@@ -98,11 +109,11 @@ public class AuthServiceImpl implements AuthService {
 		Authenticable authenticable = null;
 		if (Strings.notNullOrBlank(uid)) {
 			// Load it from the storage
-			/*if (storage != null) {
-				authenticable = storage.load(Authenticable.class, uid);
-			} else if (capiCaller != null) {
-				authenticable = capiCaller.method(capiCaller.service().getUser(uid)).execute().cast();
-			}*/
+			if (storageService != null && userClass != null) {
+				authenticable = (Authenticable) storageService.load(userClass, uid);
+			//} else if (capiCaller != null) {
+			//	authenticable = capiCaller.method(capiCaller.service().getUser(uid)).execute().cast();
+			}
 		}
 		// If NONE, simply return whatever we have
 		if (level.equals(Verification.NONE)) {
