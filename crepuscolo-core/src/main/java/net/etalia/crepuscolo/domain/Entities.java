@@ -1,7 +1,6 @@
 package net.etalia.crepuscolo.domain;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -18,7 +17,7 @@ public class Entities {
 		prefixLength = length;
 	}
 
-	public static void add(String prefix, Class<? extends BaseEntity> mainClazz,Class<? extends BaseEntity>... otherClasses) {
+	public static void add(String prefix, Class<? extends BaseEntity> mainClazz, Class<? extends BaseEntity>... otherClasses) {
 		if (prefix.trim().length() != prefixLength) {
 			throw new IllegalArgumentException("Prefix length is not valid.");
 		}
