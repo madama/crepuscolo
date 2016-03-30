@@ -35,5 +35,11 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
     </dependency>
+    <!-- TEST -->
+    <dependency>
+      <groupId>net.etalia</groupId>
+      <artifactId>crepuscolo-test</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
