@@ -1,10 +1,15 @@
 package net.etalia.crepuscolo.mvc;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.etalia.crepuscolo.json.JsonHttpExceptionHandler;
@@ -13,6 +18,7 @@ import net.etalia.crepuscolo.mvc.httpclient.HttpClientHelper;
 import net.etalia.crepuscolo.test.EmbedWeb;
 import net.etalia.crepuscolo.utils.ChainMap;
 
+@Ignore
 public class RetryFilterWebTest {
 
 	@Test
