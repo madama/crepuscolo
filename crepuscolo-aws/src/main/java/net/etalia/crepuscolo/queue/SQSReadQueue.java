@@ -32,22 +32,22 @@ import net.etalia.crepuscolo.queue.SendQueue.SendBatch;
 public class SQSReadQueue<T> implements ReadQueue<T> {
 
 	protected Log log = LogFactory.getLog(SQSReadQueue.class);
-	
+
 	private AmazonSQS sqs;
 	private AmazonS3 s3;
 
 	private String defaultClass;
 	private String queueUrl;
 	private Integer waitSeconds;
-	
+
 	private Integer visibilityTimeout;
 	private boolean progressiveTimeout = true;
-	
+
 	private Integer dlqAfter = 10;
 	private SendQueue<MessageError> dlq;
 
 	protected CrepuscoloObjectMapper om = new CrepuscoloObjectMapper();
-	
+
 	public void setSqs(AmazonSQS sqs) {
 		this.sqs = sqs;
 	}
@@ -73,14 +73,14 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 	public void setDlq(SendQueue<MessageError> dlq) {
 		this.dlq = dlq;
 	}
-	
+
 	public void setDefaultClass(String defaultClass) {
 		this.defaultClass = defaultClass;
 	}
 	public String getDefaultClass() {
 		return defaultClass;
 	}
-	
+
 	@Override
 	public MessageIterator<T> iterator() {
 		ReceiveMessageRequest rmr = new ReceiveMessageRequest();
@@ -96,7 +96,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 		}
 		return new SQSIterator(messages);
 	}
-	
+
 	public class SQSReadReceipt implements ReadReceipt {
 		private Message message;
 
@@ -109,9 +109,9 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 			return message.getMessageId();
 		}
 	}
-	
-	public class SQSIterator implements MessageIterator<T> {
 
+	public class SQSIterator implements MessageIterator<T> {
+		
 		private Iterator<Message> iter = null;
 		private List<DeleteMessageBatchRequestEntry> deletes = null;
 		private List<DeleteObjectRequest> s3deletes = null;
@@ -124,7 +124,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 			this.deletes = new ArrayList<DeleteMessageBatchRequestEntry>(messages.size());
 			this.s3deletes = new ArrayList<DeleteObjectRequest>(messages.size());
 		}
-
+		
 		@Override
 		public boolean hasNext() {
 			boolean hasNext = this.iter.hasNext();
@@ -158,7 +158,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 			}
 			return hasNext;
 		}
-
+		
 		@Override
 		public T next() {
 			if (this.acmsg != null) {
@@ -208,11 +208,11 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 				throw new IllegalStateException("Error parsing SQS payload", t);
 			}
 		}
-
+		
 		@Override
 		public void remove() {
 		}
-
+		
 		@Override
 		public void reject() {
 			this.reject(null);
@@ -229,7 +229,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 			this.acmsg = null;
 			return new SQSReadReceipt(premsg);
 		}
-
+		
 		@Override
 		public String getMessageId() {
 			return acmsg == null ? null : acmsg.getMessageId();
@@ -247,7 +247,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 			String cnt = attrs.get("ApproximateReceiveCount");
 			if (cnt != null) {
 				reccnt = Integer.parseInt(cnt);
-			}				
+			}
 		}
 		if (dlq != null && reccnt >= dlqAfter) {
 			MessageError me = new MessageError("SQS:" + queueUrl);

@@ -110,7 +110,7 @@ public class SQSSendQueue<T> implements SendQueue<T> {
 						log.debug("Using S3 for payload of " + body.length());
 						UUID fname = UUID.randomUUID();
 						String nbody = "s3;" + bucketName + ":" + bucketPrefix + fname.toString(); 
-						if (length + nbody.length() > SQS_LENGTH) break;							
+						if (length + nbody.length() > SQS_LENGTH) break;
 						ObjectMetadata omd = new ObjectMetadata();
 						log.debug("Pushed on S3 " + bucketName + " " + bucketPrefix + fname.toString() + " " + omd);
 						try {
