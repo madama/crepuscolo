@@ -5,7 +5,7 @@ import java.util.Map;
 public class JsonedException extends RuntimeException {
 
 	private static final long serialVersionUID = -4745379703039071409L;
-	
+
 	private Map<String, Object> properties;
 
 	private int statusCode;
@@ -19,9 +19,9 @@ public class JsonedException extends RuntimeException {
 	public Map<String, Object> getProperties() {
 		return properties;
 	}
-	
+
 	public int getStatusCode() {
 		return statusCode;
 	}
-	
+
 }
