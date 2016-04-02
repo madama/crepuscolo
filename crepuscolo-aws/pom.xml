@@ -15,10 +15,6 @@
       <artifactId>crepuscolo-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.etalia</groupId>
-      <artifactId>crepuscolo-web</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-s3</artifactId>
     </dependency>
