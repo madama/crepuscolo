@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
-public class HttpException extends RuntimeException {
+public class HttpException extends RetryException {
 
 	private static final long serialVersionUID = -1698656943532877561L;
 
