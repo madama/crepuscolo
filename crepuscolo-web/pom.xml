@@ -4,7 +4,7 @@
   <parent>
     <groupId>net.etalia</groupId>
     <artifactId>crepuscolo-pom</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>crepuscolo-web</artifactId>

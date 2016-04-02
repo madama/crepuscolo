@@ -1,8 +1,14 @@
 package net.etalia.crepuscolo.auth;
 
 import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.etalia.crepuscolo.codec.Base64Codec;
 import net.etalia.crepuscolo.codec.Digester;
@@ -13,16 +19,10 @@ import net.etalia.crepuscolo.services.StorageService;
 import net.etalia.crepuscolo.utils.HttpException;
 import net.etalia.crepuscolo.utils.Strings;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-
 @Configurable
 public class AuthServiceImpl implements AuthService {
 
-	private final static Logger log = Logger.getLogger(AuthServiceImpl.class.getName());
+	protected Log log = LogFactory.getLog(AuthServiceImpl.class);
 
 	@Autowired(required=false)
 	private StorageService storageService;
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
 	protected String getPrincipalUserId(AuthData authData, Verification level) {
 		if (authData == null) authData = getAuthData();
 		String uid = authData.getUserId();
-		log.log(Level.FINE, "Verifying userId : {}" + uid);
+		log.debug("Verifying userId : " + uid);
 		if (level.equals(Verification.NONE)) return uid;
 		
 		// If more than NONE, we need it to be specified at least
@@ -83,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
 	public String getSystemId(Verification level) {
 		AuthData authData = getAuthData();
 		String sysid = authData.getSystemId();
-		log.log(Level.FINE, "Verifying systemId : {}" + sysid);
+		log.debug("Verifying systemId : " + sysid);
 		if (level.equals(Verification.NONE)) return sysid;
 		if (Strings.nullOrBlank(sysid)) {
 			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED);
@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
 	protected Authenticable getUserInternal(AuthData authData, Verification level) {
 		if (authData == null) authData = getAuthData();
 		String uid = authData.getUserId();
-		log.log(Level.FINE, "Loading userId : {}" + uid);
+		log.debug("Loading userId : " + uid);
 		
 		Authenticable authenticable = null;
 		if (Strings.notNullOrBlank(uid)) {

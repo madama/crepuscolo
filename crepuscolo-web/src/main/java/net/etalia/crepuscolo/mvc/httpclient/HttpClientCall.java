@@ -10,19 +10,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import net.etalia.crepuscolo.mvc.Call;
-import net.etalia.crepuscolo.mvc.Caller.HttpMethod;
-import net.etalia.crepuscolo.mvc.JsonedException;
-import net.etalia.crepuscolo.mvc.Response;
-import net.etalia.crepuscolo.utils.Check;
-import net.etalia.crepuscolo.utils.Strings;
-import net.etalia.crepuscolo.utils.URIBuilder;
-import net.etalia.jalia.TypeUtil;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -43,9 +34,18 @@ import org.apache.http.message.BasicLineFormatter;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import net.etalia.crepuscolo.mvc.Call;
+import net.etalia.crepuscolo.mvc.Caller.HttpMethod;
+import net.etalia.crepuscolo.mvc.JsonedException;
+import net.etalia.crepuscolo.mvc.Response;
+import net.etalia.crepuscolo.utils.Check;
+import net.etalia.crepuscolo.utils.Strings;
+import net.etalia.crepuscolo.utils.URIBuilder;
+import net.etalia.jalia.TypeUtil;
+
 public class HttpClientCall<X> extends Call<X> {
 
-	protected final static Logger log = Logger.getLogger(HttpClientCall.class.getName());
+	protected Log log = LogFactory.getLog(HttpClientCall.class);
 
 	public String fieldsParameter = "outProperties";
 
@@ -91,12 +91,12 @@ public class HttpClientCall<X> extends Call<X> {
 			Check.illegalstate.assertNull("Cannot send a body with a get request", super.requestBody);
 			if (hasParameters()) {
 				setRequestParameters(ub);
-			} 
+			}
 			try {
 				uri = ub.build().toString();
 			} catch (URISyntaxException e) {
 				throw new IllegalStateException("Error adding outProperties parameter to the uri " + uri, e);
-			}				
+			}
 			if (super.method == HttpMethod.GET) {
 				message = new HttpGet(uri);
 			} else {
@@ -186,9 +186,8 @@ public class HttpClientCall<X> extends Call<X> {
 			throw new RuntimeException("Error executing HTTP call" + httpCallTrace(message, requestBody, httpresp, null), e);
 		}
 		
-		
-		if (log.isLoggable(Level.FINE)) {
-			log.log(Level.FINE, httpCallTrace(message, requestBody, httpresp, payload));
+		if (log.isDebugEnabled()) {
+			log.debug(httpCallTrace(message, requestBody, httpresp, payload));
 		}
 
 		int statusCode = httpresp.getStatusLine().getStatusCode();

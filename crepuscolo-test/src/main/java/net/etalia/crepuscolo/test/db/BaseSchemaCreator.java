@@ -10,10 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -30,7 +31,7 @@ import org.springframework.core.io.Resource;
  */
 public class BaseSchemaCreator implements SchemaCreator, ApplicationContextAware, InitializingBean {
 
-	protected final static Logger log = Logger.getLogger(BaseSchemaCreator.class.getName());
+	protected Log log = LogFactory.getLog(BaseSchemaCreator.class);
 
 	protected List<String> files = null;
 	protected DataSource datasource = null;
@@ -96,7 +97,7 @@ public class BaseSchemaCreator implements SchemaCreator, ApplicationContextAware
 						allcommand.append(line);
 						allcommand.append('\n');
 						if (line.contains(goDelimiter)) {
-							log.fine("Execute: " + allcommand.toString());
+							log.debug("Execute: " + allcommand.toString());
 							stmt.executeUpdate(allcommand.toString());
 							allcommand = new StringBuilder();
 						}

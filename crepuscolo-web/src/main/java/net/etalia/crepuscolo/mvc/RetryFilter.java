@@ -1,8 +1,6 @@
 package net.etalia.crepuscolo.mvc;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.persistence.OptimisticLockException;
 import javax.servlet.Filter;
@@ -14,6 +12,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.TransientDataAccessException;
 
@@ -23,7 +23,7 @@ import net.etalia.crepuscolo.utils.RetryException;
 
 public class RetryFilter implements Filter {
 
-	protected Logger log = Logger.getLogger(RetryFilter.class.getName());
+	protected Log log = LogFactory.getLog(RetryFilter.class);
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -42,11 +42,11 @@ public class RetryFilter implements Filter {
 			// note that first time this will bring retry to -1
 			retry--;
 			try {
-				if (log.isLoggable(Level.FINE)) {
+				if (log.isDebugEnabled()) {
 					if (retry < 0) {
-						log.fine("First try");
+						log.debug("First try");
 					} else {
-						log.fine("Retries left " + retry);
+						log.debug("Retries left " + retry);
 					}
 				}
 				// Try to execute the request normally
@@ -61,10 +61,10 @@ public class RetryFilter implements Filter {
 				}
 				// If it manages to execute, simply return
 				nresp.commit();
-				log.fine("No exception, no need to retry");
+				log.debug("No exception, no need to retry");
 				return;
 			} catch (Throwable e) {
-				log.warning("Got exception, checking for retry " + e.getMessage());
+				log.warn("Got exception, checking for retry ", e);
 				
 				// Save the exception 
 				exception = e;
@@ -87,10 +87,10 @@ public class RetryFilter implements Filter {
 				
 				// Check if an exception worth retrying has been found in the chain
 				if (found != null) {
-					log.fine("Found exception worth retrying " + found.getClass().getName());
+					log.debug("Found exception worth retrying "  + found.getClass().getName());
 					// If the response has already been committed, there is nothing we can do except rethrow the exception
 					if (response.isCommitted()) {
-						log.warning("Response was already committed, cannot retry " + found.getClass().getName());
+						log.warn("Response was already committed, cannot retry " + found.getClass().getName());
 						break;
 					}
 					// If we are at retry = -1 (first time it executes)
@@ -101,7 +101,7 @@ public class RetryFilter implements Filter {
 						if (found instanceof RetryException) {
 							retry = ((RetryException)found).getRetries();
 						}
-						log.fine("Will retry " + retry + " times");
+						log.debug("Will retry " + retry + " times");
 					}
 					// Sleep for a while, to allow race condition to go away
 					try {
@@ -111,7 +111,7 @@ public class RetryFilter implements Filter {
 						if (found instanceof RetryException) {
 							sleep = ((RetryException)found).getSleep();
 						} 
-						log.fine("Sleeping " + sleep + " before retry");
+						log.debug("Sleeping " + sleep + " before retry");
 						Thread.sleep(sleep);
 					} catch (InterruptedException ie) {
 						// We have been interrupted, quit

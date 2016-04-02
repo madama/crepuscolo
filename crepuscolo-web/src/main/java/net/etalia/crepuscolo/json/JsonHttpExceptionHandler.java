@@ -2,18 +2,12 @@ package net.etalia.crepuscolo.json;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.etalia.crepuscolo.auth.AuthData;
-import net.etalia.crepuscolo.check.AuthException;
-import net.etalia.crepuscolo.utils.ChainMap;
-import net.etalia.crepuscolo.utils.HttpException;
-import net.etalia.jalia.spring.JaliaJsonView;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
@@ -21,9 +15,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.etalia.crepuscolo.auth.AuthData;
+import net.etalia.crepuscolo.check.AuthException;
+import net.etalia.crepuscolo.utils.ChainMap;
+import net.etalia.crepuscolo.utils.HttpException;
+import net.etalia.jalia.spring.JaliaJsonView;
+
 public class JsonHttpExceptionHandler implements HandlerExceptionResolver, Ordered {
 
-	protected final static Logger log = Logger.getLogger(JsonHttpExceptionHandler.class.getName());
+	protected Log log = LogFactory.getLog(JsonHttpExceptionHandler.class);
 
 	private int order = -1;
 
@@ -39,7 +39,7 @@ public class JsonHttpExceptionHandler implements HandlerExceptionResolver, Order
 			htex = new HttpException().statusCode(((AuthException) ex).getStatusCode());
 		} else if (!(ex instanceof HttpException)) {
 			htex = new HttpException().cause(ex);
-			log.log(Level.SEVERE, "Found an Error", ex);
+			log.error("Found an Error", ex);
 		} else {
 			htex = (HttpException) ex;
 		}
@@ -73,7 +73,7 @@ public class JsonHttpExceptionHandler implements HandlerExceptionResolver, Order
 			if (!StringUtils.hasLength(errorCode)) errorCode = "ERROR";
 			ChainMap<Object> errmap = new ChainMap<Object>("code", errorCode).add("message", reason);
 			
-			if (log.isLoggable(Level.FINE)) {
+			if (log.isDebugEnabled()) {
 				StringWriter sw = new StringWriter();
 				htex.printStackTrace(new PrintWriter(sw));
 				sw.close();

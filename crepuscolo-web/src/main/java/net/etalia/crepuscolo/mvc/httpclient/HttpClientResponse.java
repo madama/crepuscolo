@@ -4,8 +4,11 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 
 import net.etalia.crepuscolo.json.CrepuscoloObjectMapper;
 import net.etalia.crepuscolo.mvc.Call;
@@ -14,12 +17,9 @@ import net.etalia.jalia.BeanJsonDeSer;
 import net.etalia.jalia.JsonDeSer;
 import net.etalia.jalia.TypeUtil;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-
 public class HttpClientResponse<X> implements Response<X> {
 
-	protected final static Logger log = Logger.getLogger(HttpClientResponse.class.getName());
+	protected Log log = LogFactory.getLog(HttpClientResponse.class);
 
 	private Type type;
 	private HttpResponse httpresp;
@@ -38,8 +38,8 @@ public class HttpClientResponse<X> implements Response<X> {
 	public X cast() {
 		if (!consumed) {
 			consumed = true;
-			if (log.isLoggable(Level.FINE)) {
-				log.log(Level.FINE, "Deserialize: {}", new String(payload));
+			if (log.isDebugEnabled()) {
+				log.debug("Deserialize: " + new String(payload));
 			}
 			value = Call.eom.readValue(payload, TypeUtil.get(type));
 		}
@@ -72,8 +72,8 @@ public class HttpClientResponse<X> implements Response<X> {
 				break;
 			}
 		}
-		if (log.isLoggable(Level.FINE)) {
-			log.log(Level.FINE, "Deserialize to map : {}", new String(payload));
+		if (log.isDebugEnabled()) {
+			log.debug("Deserialize to map : " + new String(payload));
 		}
 		
 		return om.readValue(payload);

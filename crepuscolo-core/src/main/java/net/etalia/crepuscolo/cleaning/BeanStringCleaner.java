@@ -11,17 +11,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 public class BeanStringCleaner {
 
-	protected final static Logger log = Logger.getLogger(BeanStringCleaner.class.getName());
+	protected final static Log log = LogFactory.getLog(BeanStringCleaner.class);
 
 	public static String clean(String str) {
 		return clean(str,false);
@@ -91,7 +91,7 @@ public class BeanStringCleaner {
 					if (pe.perform) props.add(pe);
 				}
 			} catch (IntrospectionException e) {
-				log.log(Level.WARNING, "Error while introspecting " + clazz.getName(), e);
+				log.error("Error while introspecting " + clazz.getName(), e);
 			}
 			cleanProperties.put(clazz, props);
 		}
@@ -105,7 +105,7 @@ public class BeanStringCleaner {
 				if (val.length() == 0) val = null;
 				BeanUtils.setProperty(bean, pe.name, val);
 			} catch (Exception e) {
-				log.log(Level.WARNING, "Error while string cleaning " + clazz.getName() + "." + pe.name, e);
+				log.error("Error while string cleaning " + clazz.getName() + "." + pe.name, e);
 			}
 		}
 		
@@ -147,7 +147,7 @@ public class BeanStringCleaner {
 						props.add(pd.getName());
 					}
 				} catch (IntrospectionException e) {
-					log.log(Level.WARNING, "Error while introspecting " + clazz.getName(), e);
+					log.error("Error while introspecting " + clazz.getName(), e);
 				}
 			}
 			recurseProperties.put(clazz, props);
@@ -167,7 +167,7 @@ public class BeanStringCleaner {
 					recurseCleanBean(val, dones);
 				}
 			} catch (Exception e) {
-				log.log(Level.WARNING, "Error while string cleaning " + clazz.getName() + "." + pname, e);
+				log.error("Error while string cleaning " + clazz.getName() + "." + pname, e);
 			}
 		}
 		

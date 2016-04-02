@@ -1,6 +1,10 @@
 package net.etalia.crepuscolo.todolist.controller;
 
-import java.util.logging.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.etalia.crepuscolo.services.AuthService;
 import net.etalia.crepuscolo.services.CreationService;
@@ -9,14 +13,10 @@ import net.etalia.crepuscolo.todolist.domain.User;
 import net.etalia.crepuscolo.utils.HttpException;
 import net.etalia.crepuscolo.utils.ParMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-
 @Controller
 public class TodolistAPIImpl implements TodolistAPI {
 
-	protected final static Logger log = Logger.getLogger(TodolistAPIImpl.class.getName());
+	protected Log log = LogFactory.getLog(TodolistAPIImpl.class);
 
 	@Autowired
 	private StorageService storage;
@@ -32,7 +32,7 @@ public class TodolistAPIImpl implements TodolistAPI {
 	public User addUser(User user) {
 		User exist = storage.load(User.Queries.BY_EMAIL, new ParMap("email", user.getEmail()));
 		if (exist != null) {
-			log.fine("User already exist!");
+			log.debug("User already exist!");
 			throw new HttpException().statusCode(500).errorCode("U01").message("User Already Exist");
 		}
 		creation.assignId(user);

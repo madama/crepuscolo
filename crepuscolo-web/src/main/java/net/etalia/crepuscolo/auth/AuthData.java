@@ -2,8 +2,9 @@ package net.etalia.crepuscolo.auth;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import net.etalia.crepuscolo.codec.Token;
 import net.etalia.crepuscolo.codec.Token.TokenReader;
@@ -51,7 +52,7 @@ public class AuthData {
 	public static String STATIC_SALT;
 	public static String AUTHENTICATION_SIGN;
 
-	protected final static Logger log = Logger.getLogger(AuthData.class.getName());
+	protected Log log = LogFactory.getLog(AuthData.class);
 
 	public enum Fields {
 		UserId("ui"),
@@ -76,7 +77,7 @@ public class AuthData {
 	private String currentToken;
 
 	public AuthData(String header, boolean validPort, boolean https) {
-		log.log(Level.FINE, "Authenticating with {} validPort:{} https:{}", new Object[] { header, validPort, https});
+		log.debug("Authenticating with " + header + " validPort:" + validPort + " https:" + https);
 		if (header != null) {
 			this.currentToken = header;
 			if (header.startsWith(AUTHENTICATION_SIGN + " ")) header = header.substring(7);
@@ -90,7 +91,7 @@ public class AuthData {
 		// Put https
 		incoming.put(Fields.Https.fname, https);
 		
-		log.log(Level.FINE, "Auth data : {}", incoming);
+		log.debug("Auth data : " + incoming);
 		
 		// Check systemid only on valid ports
 		if (incoming.get(Fields.SystemId.fname) != null) {

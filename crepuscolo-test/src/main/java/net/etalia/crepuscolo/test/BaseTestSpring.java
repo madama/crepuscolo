@@ -2,10 +2,9 @@ package net.etalia.crepuscolo.test;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 
-import net.etalia.crepuscolo.test.db.SchemaCreator;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -15,11 +14,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import net.etalia.crepuscolo.test.db.SchemaCreator;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @Ignore
 public class BaseTestSpring implements ApplicationContextAware, InitializingBean {
 
-	protected final static Logger log = Logger.getLogger(BaseTestSpring.class.getName());
+	protected Log log = LogFactory.getLog(BaseTestSpring.class);
 
 	protected ApplicationContext applicationContext;
 

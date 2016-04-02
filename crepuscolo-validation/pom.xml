@@ -4,12 +4,16 @@
   <parent>
     <groupId>net.etalia</groupId>
     <artifactId>crepuscolo-pom</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
   <artifactId>crepuscolo-validation</artifactId>
   <packaging>jar</packaging>
   <dependencies>
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>javax.el-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>net.etalia</groupId>
       <artifactId>crepuscolo-core</artifactId>

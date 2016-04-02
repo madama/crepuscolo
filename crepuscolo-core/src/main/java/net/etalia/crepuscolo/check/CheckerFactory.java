@@ -4,13 +4,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class CheckerFactory {
 
-	protected final static Logger log = Logger.getLogger(CheckerFactory.class.getName());
+	protected final static Log log = LogFactory.getLog(CheckerFactory.class);
 	
 	private Map<Method, Checker> cache = new HashMap<Method, Checker>();
 	
@@ -19,7 +20,7 @@ public class CheckerFactory {
 		Checker ret = cache.get(m);
 		if (ret != null) return ret;
 		
-		log.fine("Building checker for method " + m);
+		log.trace("Building checker for method " + m);
 		
 		ret = new ChAndChecker();
 		
@@ -65,7 +66,7 @@ public class CheckerFactory {
 		}
 		if (chann == null) return null;
 		
-		log.fine("Instantiating checker for " + chann);
+		log.trace("Instantiating checker for " + chann);
 		
 		// Instantiate the checker
 		Checker ch;
@@ -74,7 +75,7 @@ public class CheckerFactory {
 			chclazz = (Class<? extends Checker>) Class.forName(implann.getName() + "Checker");
 			ch = chclazz.newInstance();
 		} catch (Exception e1) {
-			log.severe("Error instantiating checker " + e1.getMessage());
+			log.error("Error instantiating checker " + e1.getMessage());
 			throw new IllegalArgumentException(e1);
 		}
 		
@@ -86,7 +87,7 @@ public class CheckerFactory {
 			try {
 				BeanUtils.setProperty(ch, k, v);
 			} catch (Exception e) {
-				log.warning("Error processing property \"" + k + "\" from " + chann + " " + e.getMessage());
+				log.warn("Error processing property \"" + k + "\" from " + chann + " " + e.getMessage());
 			}
 		}
 		
@@ -99,7 +100,7 @@ public class CheckerFactory {
 					Object val = getm.invoke(annotation);
 					BeanUtils.setProperty(ch, getm.getName(), val);
 				} catch (Exception e) {
-					log.warning("Error processing property \"" + getm.toString() + "\" on " + chclazz + " " + e.getMessage());
+					log.error("Error processing property \"" + getm.toString() + "\" on " + chclazz + " " + e.getMessage());
 				}
 			}
 		}
