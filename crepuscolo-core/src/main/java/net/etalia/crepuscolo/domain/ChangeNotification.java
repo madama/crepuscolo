@@ -1,4 +1,4 @@
-package net.etalia.crepuscolo.hibernate;
+package net.etalia.crepuscolo.domain;
 
 import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.Jsonable;
