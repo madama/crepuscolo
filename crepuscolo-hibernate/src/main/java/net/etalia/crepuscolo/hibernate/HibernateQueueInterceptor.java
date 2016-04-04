@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import net.etalia.crepuscolo.check.CheckNoAuth;
 import net.etalia.crepuscolo.domain.BaseEntity;
+import net.etalia.crepuscolo.domain.ChangeNotification;
 import net.etalia.crepuscolo.queue.SendQueue;
 import net.etalia.crepuscolo.queue.SendQueue.SendBatch;
 

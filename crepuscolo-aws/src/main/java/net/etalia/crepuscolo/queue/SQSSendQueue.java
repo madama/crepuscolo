@@ -79,7 +79,7 @@ public class SQSSendQueue<T> implements SendQueue<T> {
 	}
 
 	public class SQSSendBatch implements SendBatch<T> {
-
+		
 		private Map<T, String> payloads = new HashMap<T, String>(); 
 		
 		@Override
@@ -95,7 +95,7 @@ public class SQSSendQueue<T> implements SendQueue<T> {
 				}
 			}
 		}
-
+		
 		@Override
 		public void send() {
 			prepare();
