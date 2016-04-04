@@ -46,7 +46,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 	private Integer dlqAfter = 10;
 	private SendQueue<MessageError> dlq;
 
-	protected CrepuscoloObjectMapper om = new CrepuscoloObjectMapper();
+	protected CrepuscoloObjectMapper objectMapper = new CrepuscoloObjectMapper();
 
 	public void setSqs(AmazonSQS sqs) {
 		this.sqs = sqs;
@@ -65,6 +65,9 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 	}
 	public void setProgressiveTimeout(boolean progressiveTimeout) {
 		this.progressiveTimeout = progressiveTimeout;
+	}
+	public void setObjectMapper(CrepuscoloObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 
 	public void setDlqAfter(Integer dlqAfter) {
@@ -283,7 +286,7 @@ public class SQSReadQueue<T> implements ReadQueue<T> {
 	@SuppressWarnings("unchecked")
 	protected T parse(String body, String clazz) {
 		try {
-			return (T)om.readValue(body, Class.forName(clazz));
+			return (T)objectMapper.readValue(body, Class.forName(clazz));
 		} catch (Exception e) {
 			throw new IllegalStateException(e);
 		}

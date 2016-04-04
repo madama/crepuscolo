@@ -24,6 +24,9 @@ public class ChangeNotification<T extends Jsonable> implements Jsonable {
 
 	private long created = System.currentTimeMillis();
 
+	public ChangeNotification() {
+	}
+
 	/**
 	 * Build a new notification
 	 * @param type The type of the notification

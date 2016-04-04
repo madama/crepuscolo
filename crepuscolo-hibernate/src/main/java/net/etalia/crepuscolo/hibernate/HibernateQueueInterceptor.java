@@ -148,6 +148,7 @@ public class HibernateQueueInterceptor extends EmptyInterceptor implements Appli
 		if (clazz == null) return;
 
 		ChangeNotification<BaseEntity> req = new ChangeNotification<BaseEntity>(type, clazz, entity);
+		processNotification(req);
 		if (getSessionFactory() == null) {
 			SendBatch<ChangeNotification<? extends BaseEntity>> batch = queue.startBatch();
 			batch.put(req);
@@ -213,6 +214,9 @@ public class HibernateQueueInterceptor extends EmptyInterceptor implements Appli
 
 	protected Class<? extends BaseEntity> computeSendClass(BaseEntity entity) {
 		return entity.getClass();
+	}
+
+	protected void processNotification(ChangeNotification<BaseEntity> notification) {
 	}
 
 }
