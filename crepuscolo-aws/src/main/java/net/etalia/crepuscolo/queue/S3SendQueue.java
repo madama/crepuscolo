@@ -152,7 +152,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		return payload;
 	}
 	
-	protected String getName(T object) {
+	protected String getName(Object object) {
 		if (object instanceof BaseEntity) return ((BaseEntity)object).getId();
 		return UUID.randomUUID().toString();
 	}
