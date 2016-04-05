@@ -30,7 +30,17 @@ import org.springframework.beans.factory.annotation.Configurable;
 @Configurable
 public class AuthCheckServlet extends HttpServlet {
 
-	private Validator validator = null; 
+	private Validator validator = null;
+	
+	private ObjectMapper mapper = null;
+	private String defaultDomainPackage = null;
+	
+	public void setObjectMapper(ObjectMapper mapper) {
+		this.mapper = mapper;
+	}
+	public void setDefaultDomainPackage(String defaultDomainPackage) {
+		this.defaultDomainPackage = defaultDomainPackage;
+	}
 	
 	@Override
 	public void init() throws ServletException {
@@ -89,9 +99,17 @@ public class AuthCheckServlet extends HttpServlet {
 				// TODO implement some type of cache here
 				try {
 					if (clazz.indexOf('.') == -1) {
-						// we serialize the @entity only with the class name, so
-						// we should accept it as is
-						clazz = "net.etalia.crepuscolo.domain." + clazz; //TODO: this sould be a param
+						String foundName = null; 
+						// Try to find out the class based on the passed @entity
+						if (this.mapper != null) {
+							Class<?> entityClass = this.mapper.getEntityNameProvider().getEntityClass(clazz);
+							if (entityClass != null) foundName = entityClass.getName();
+						}
+						if (foundName == null) {
+							// Try resolving to base class
+							foundName = this.defaultDomainPackage + "." + clazz; 
+						}
+						clazz = foundName;
 					}
 					Class rclazz = Class.forName(clazz);
 					BeanDescriptor descr = validator.getConstraintsForClass(rclazz);
