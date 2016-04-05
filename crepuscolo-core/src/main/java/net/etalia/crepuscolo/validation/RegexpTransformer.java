@@ -1,4 +1,4 @@
-package net.etalia.crepuscolo.auth;
+package net.etalia.crepuscolo.validation;
 
 import java.util.Map;
 

@@ -14,6 +14,7 @@ import javax.validation.metadata.ConstraintDescriptor;
 
 import net.etalia.crepuscolo.utils.Beans;
 import net.etalia.crepuscolo.utils.ChainMap;
+import net.etalia.crepuscolo.validation.RegexpTransformer;
 
 public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>> {
 
@@ -89,7 +90,7 @@ public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>>
 		}
 		// Try in the default package
 		try {
-			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.check.regexps." + vclass.getSimpleName() + "RegexpTransformer");
+			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.crepuscolo.validation.regexps." + vclass.getSimpleName() + "RegexpTransformer");
 		} catch (Exception e) {
 		}
 		
