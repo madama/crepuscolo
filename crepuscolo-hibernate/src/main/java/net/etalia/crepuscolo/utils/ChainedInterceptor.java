@@ -20,7 +20,9 @@ public class ChainedInterceptor implements Interceptor {
 	}
 
 	public void addToChain(Interceptor interceptor) {
-		this.chain.add(interceptor);
+		if (interceptor != null) {
+			this.chain.add(interceptor);
+		}
 	}
 
 	@Override
