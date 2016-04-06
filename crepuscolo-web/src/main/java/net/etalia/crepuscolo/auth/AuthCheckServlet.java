@@ -51,6 +51,8 @@ public class AuthCheckServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setHeader("Access-Control-Allow-Origin","*");
+		resp.setHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept");
 		if (req.getMethod().equals("OPTIONS")) return;
 		CheckAspect aspect = CheckAspect.aspectOf();
 		try {
