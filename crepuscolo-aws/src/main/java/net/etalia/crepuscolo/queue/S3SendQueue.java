@@ -3,33 +3,26 @@ package net.etalia.crepuscolo.queue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.Map.Entry;
-
-import net.etalia.crepuscolo.check.CheckMode;
-import net.etalia.crepuscolo.domain.BaseEntity;
-import net.etalia.crepuscolo.json.CrepuscoloObjectMapper;
-import net.etalia.crepuscolo.queue.SQSSendQueue.SQSSendBatch;
-import net.etalia.crepuscolo.queue.SendQueue.SendBatch;
-import net.etalia.jalia.OutField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.model.SendMessageBatchRequest;
-import com.amazonaws.services.sqs.model.SendMessageBatchRequestEntry;
 import com.amazonaws.util.StringInputStream;
+
+import net.etalia.crepuscolo.check.CheckMode;
+import net.etalia.crepuscolo.domain.BaseEntity;
+import net.etalia.crepuscolo.json.CrepuscoloObjectMapper;
+import net.etalia.jalia.OutField;
 
 public class S3SendQueue<T> implements SendQueue<T> {
 
@@ -41,7 +34,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 	protected Properties fields;
 	protected String bucketName;
 	protected String bucketPrefix = "";
-	
+
 	protected boolean withClassPrefix = false;
 	protected CrepuscoloObjectMapper om = null;
 
@@ -58,7 +51,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		this.fields = fields;
 	}
 	// TODO autowire?
-	public void setObjectManager(CrepuscoloObjectMapper om) {
+	public void setObjectMapper(CrepuscoloObjectMapper om) {
 		this.om = om;
 	}
 	public void setWithClassPrefix(boolean withClassPrefix) {
@@ -82,14 +75,14 @@ public class S3SendQueue<T> implements SendQueue<T> {
 	}
 
 	public class S3SendBatch implements SendBatch<T> {
-		
-		private Map<T, String> payloads = new HashMap<T, String>(); 
-		
+	
+		protected Map<T, String> payloads = new HashMap<T, String>(); 
+	
 		@Override
 		public void put(T object) {
 			payloads.put(object, null);
 		}
-		
+	
 		@Override
 		public void prepare() {
 			for (Map.Entry<T, String> entry : payloads.entrySet()) {
@@ -98,7 +91,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 				}
 			}
 		}
-		
+	
 		@Override
 		public void send() {
 			prepare();
@@ -151,7 +144,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		}
 		return payload;
 	}
-	
+
 	protected String getName(Object object) {
 		if (object instanceof BaseEntity) return ((BaseEntity)object).getId();
 		return UUID.randomUUID().toString();
@@ -165,6 +158,5 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		if (props != null) return new String[] { clazz.getName(), props };
 		return findFieldsFor(o, clazz.getSuperclass());
 	}
-
 
 }

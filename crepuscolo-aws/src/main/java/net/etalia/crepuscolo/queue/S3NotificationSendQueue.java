@@ -31,11 +31,12 @@ public class S3NotificationSendQueue<T> extends S3SendQueue<T> {
 			} else throw e;
 		}
 	}
-	
+
 	@Override
+	@SuppressWarnings("rawtypes")
 	protected String getName(Object o) {
 		if (!(o instanceof ChangeNotification)) return super.getName(o);
 		return super.getName(((ChangeNotification)o).getInstance());
 	}
-	
+
 }
