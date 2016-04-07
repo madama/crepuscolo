@@ -19,6 +19,11 @@ public class ServiceHack {
 		return instance;
 	}
 
+	public static ServiceHack createNewInstance() {
+		instance = new ServiceHack();
+		return instance;
+	}
+
 	@Autowired(required=false)
 	private StorageService storageService;
 
