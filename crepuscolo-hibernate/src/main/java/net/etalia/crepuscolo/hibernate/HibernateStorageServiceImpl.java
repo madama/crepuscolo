@@ -54,7 +54,7 @@ public class HibernateStorageServiceImpl implements StorageService {
 
 	@Transactional(readOnly=true,propagation=Propagation.REQUIRES_NEW)
 	@Override
-	public final <T extends BaseEntity> T loadStored(Class<T> clz, String id) {
+	public <T extends BaseEntity> T loadStored(Class<T> clz, String id) {
 		return (T) getCurrentSession().get(clz, id);
 	}
 
