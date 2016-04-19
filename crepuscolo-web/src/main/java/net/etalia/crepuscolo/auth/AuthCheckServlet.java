@@ -120,6 +120,7 @@ public class AuthCheckServlet extends HttpServlet {
 					Map<String, PropertyValidationDescriptor> outpds = new HashMap<String, PropertyValidationDescriptor>();
 					for (PropertyDescriptor pd : pds) {
 						PropertyValidationDescriptor pvad = new PropertyValidationDescriptor(rclazz, null, pd, descr.getConstraintsForProperty(pd.getName()));
+						pvad.addType(pd, this.mapper);
 						if (!pvad.isEmpty()) outpds.put(pd.getName(), pvad);
 					}
 					resp.setContentType("application/json");

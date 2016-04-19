@@ -2,6 +2,7 @@ package net.etalia.crepuscolo.auth;
 
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,11 +16,14 @@ import javax.validation.metadata.ConstraintDescriptor;
 import net.etalia.crepuscolo.utils.Beans;
 import net.etalia.crepuscolo.utils.ChainMap;
 import net.etalia.crepuscolo.validation.RegexpTransformer;
+import net.etalia.jalia.ObjectMapper;
+import net.etalia.jalia.TypeUtil;
 
-public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>> {
+public class PropertyValidationDescriptor extends HashMap<String,Object> {
 
 	public <T> PropertyValidationDescriptor(Class<T> clazz, T instance, PropertyDescriptor bprop, javax.validation.metadata.PropertyDescriptor vprop) {
 		// Check for validation
+		ArrayList<Object> vals = new ArrayList<>();
 		if (vprop != null) {
 			Set<ConstraintDescriptor<?>> cnsts = vprop.getConstraintDescriptors();
 			for (ConstraintDescriptor<?> cdescr : cnsts) {
@@ -48,20 +52,21 @@ public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>>
 					}
 					def.put("message", attrs.get("message"));
 					def.put("type", cdescr.getAnnotation().annotationType().getSimpleName());
-					this.add(def);
+					vals.add(def);
 				}
 			}
 		}
 		if (bprop != null) {
 			RegexpTransformer trans = findRegexpTransformer(bprop.getPropertyType());
 			if (trans != null) {
-				this.add(
+				vals.add(
 						new ChainMap("re", 
 								new ChainMap<String[]>(trans.getName(), trans.getRegexp(Collections.EMPTY_MAP))
-						).add("type", bprop.getPropertyType().getSimpleName()).add("message", "_NOT_VALID")
+								).add("type", bprop.getPropertyType().getSimpleName()).add("message", "_NOT_VALID")
 						);
 			}
 		}
+		this.put("validation", vals);
 	}
 
 	private List<String> toClassSimpleNames(Collection<?> clzs) {
@@ -90,7 +95,7 @@ public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>>
 		}
 		// Try in the default package
 		try {
-			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.crepuscolo.validation.regexps." + vclass.getSimpleName() + "RegexpTransformer");
+			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.crepuscolo.validation.regexps." + BeanUvclass.getSimpleName() + "RegexpTransformer");
 		} catch (Exception e) {
 		}
 		
@@ -102,6 +107,52 @@ public class PropertyValidationDescriptor extends ArrayList<Map<String, Object>>
 		}
 		regexpTransformersCache.put(vclass, cached);
 		return cached;
+	}
+	
+	private Map<String,Object> makeTypeMap(TypeUtil ptype, ObjectMapper mapper) {
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		if (ptype == null) return map;
+		String name = ptype.getType().getTypeName();
+		name = name.replaceAll("(?:[^\\.,<>]+\\.)*([^\\.,<>]+)", "$1");
+		if (ptype.hasConcrete()) {
+			if (mapper != null) {
+				String mname = mapper.getEntityNameProvider().getEntityName(ptype.getConcrete());
+				if (mname != null && mname.length() > 0) {
+					name = mname;
+					map.put("mapped", true);
+				}
+			}
+			if (ptype.isArray() || ptype.isListOrSet()) {
+				map.put("collection", true);
+				map.put("collectionEntity", makeTypeMap(ptype.getArrayListOrSetType(), mapper));
+			}
+			if (ptype.isEnum()) map.put("enum", true);
+			if (ptype.getConcrete().isPrimitive()) map.put("primitive", true);
+			if (ptype.getConcrete().getName().startsWith("java.lang")) map.put("lang", true);
+		}
+		
+		map.put("entity", name);
+		return map;
+	}
+
+	public void addType(PropertyDescriptor pd, ObjectMapper mapper) {
+		if (pd.getName().equals("class")) return;
+		Type propType = null;
+		if (pd.getReadMethod() != null) {
+			propType = pd.getReadMethod().getGenericReturnType();
+		} else if (pd.getWriteMethod() != null) {
+			propType = pd.getWriteMethod().getGenericParameterTypes()[0];
+		}
+		if (propType == null) return;
+		
+		TypeUtil ptype = TypeUtil.get(propType);
+		Map<String,Object> map = this.makeTypeMap(ptype, mapper);
+		if (pd.getWriteMethod() == null) {
+			map.put("readOnly", true);
+		} else if (pd.getReadMethod() == null) {
+			map.put("writeOnly", true);
+		}
+		this.put("entity", map);
 	}
 
 }
