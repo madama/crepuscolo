@@ -112,7 +112,7 @@ public class PropertyValidationDescriptor extends HashMap<String,Object> {
 	private Map<String,Object> makeTypeMap(TypeUtil ptype, ObjectMapper mapper) {
 		HashMap<String, Object> map = new HashMap<String,Object>();
 		if (ptype == null) return map;
-		String name = ptype.getType().getTypeName();
+		String name = ptype.getType().toString();
 		name = name.replaceAll("(?:[^\\.,<>]+\\.)*([^\\.,<>]+)", "$1");
 		if (ptype.hasConcrete()) {
 			if (mapper != null) {
