@@ -95,7 +95,9 @@ public class PropertyValidationDescriptor extends HashMap<String,Object> {
 		}
 		// Try in the default package
 		try {
-			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.crepuscolo.validation.regexps." + vclass.getSimpleName() + "RegexpTransformer");
+			String sn = vclass.getSimpleName();
+			sn = Character.toUpperCase(sn.charAt(0)) + sn.substring(1);
+			rtclazz = (Class<? extends RegexpTransformer>) Class.forName("net.etalia.crepuscolo.validation.regexps." + sn + "RegexpTransformer");
 		} catch (Exception e) {
 		}
 		

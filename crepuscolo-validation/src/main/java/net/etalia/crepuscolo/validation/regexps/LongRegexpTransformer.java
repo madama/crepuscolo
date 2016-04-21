@@ -4,16 +4,16 @@ import java.util.Map;
 
 import net.etalia.crepuscolo.validation.RegexpTransformer;
 
-public class EmailValidatorRegexpTransformer implements RegexpTransformer {
+public class LongRegexpTransformer implements RegexpTransformer {
 
 	@Override
 	public String getName() {
-		return "email";
+		return "Long";
 	}
 
 	@Override
 	public String[] getRegexp(Map<String, Object> attrs) {
-		return new String[] {"^$|^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]+$","i"};
+		return new String[] { "^(-)?[0-9]*$" , ""};
 	}
 
 }
