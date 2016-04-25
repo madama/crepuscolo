@@ -36,7 +36,8 @@ public aspect CheckAspect {
 		||
 		execution(@CheckerAnnotation * *.*(..))
 		)
-		&& !execution(* (@(Entity || MappedSuperclass) *).get*());
+		&& !execution(* (@(Entity || MappedSuperclass) *).get*())
+		&& !execution(* (@(Entity || MappedSuperclass) *).is*());
 
 	@Autowired(required=true)
 	private AuthService authService;
