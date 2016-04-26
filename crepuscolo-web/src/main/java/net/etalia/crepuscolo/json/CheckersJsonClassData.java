@@ -10,6 +10,8 @@ import net.etalia.crepuscolo.check.Checker;
 import net.etalia.crepuscolo.check.CheckerFactory;
 import net.etalia.crepuscolo.check.GetterCheckPoint;
 import net.etalia.crepuscolo.check.Transformer;
+import net.etalia.crepuscolo.services.AuthService;
+import net.etalia.crepuscolo.services.ServiceHack;
 import net.etalia.jalia.JsonClassData;
 import net.etalia.jalia.annotations.JsonGetter;
 
@@ -56,6 +58,7 @@ public class CheckersJsonClassData extends JsonClassData {
 			if (getter == null) return null;
 			checker  = checkerFactory.getFor(getter);
 			cp = new GetterCheckPoint(obj, getter);
+			cp.setAuthService(ServiceHack.getInstance().getBean(AuthService.class)); //TODO: try to avoid this...
 			if (checker.check(cp) != 0) {
 				//log.trace("... unauthorized: " + propertyName);
 				return null;
