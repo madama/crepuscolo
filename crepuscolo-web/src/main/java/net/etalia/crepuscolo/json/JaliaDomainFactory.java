@@ -23,14 +23,14 @@ import net.etalia.jalia.TypeUtil;
 
 public class JaliaDomainFactory implements EntityNameProvider, EntityFactory, JsonClassDataFactory {
 
-	private JsonClassDataFactoryImpl classDataFactory = new JsonClassDataFactoryImpl();
-	private Map<Class<?>, String> nameMappingsByClass = new HashMap<>();
-	private Map<String, Class<?>> nameMappingsByName = new HashMap<>();
+	protected JsonClassDataFactoryImpl classDataFactory = new JsonClassDataFactoryImpl();
+	protected Map<Class<?>, String> nameMappingsByClass = new HashMap<>();
+	protected Map<String, Class<?>> nameMappingsByName = new HashMap<>();
 
-	private StorageService storageService;
-	private CreationService creationService = new CreationServiceImpl();
-	private CheckerFactory checkerFactory;
-	private boolean client = false;
+	protected StorageService storageService;
+	protected CreationService creationService = new CreationServiceImpl();
+	protected CheckerFactory checkerFactory;
+	protected boolean client = false;
 
 	public void map(Class<?> clazz) {
 		map(clazz,clazz.getSimpleName());

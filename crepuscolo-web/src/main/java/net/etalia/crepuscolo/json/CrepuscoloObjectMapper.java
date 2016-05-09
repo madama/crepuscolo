@@ -28,10 +28,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 @Configurable
 public class CrepuscoloObjectMapper extends ObjectMapper {	
 	
-	private StorageService storageService;
-	private CreationService creationService = new CreationServiceImpl();
-	private CheckerFactory checkerFactory;
-	private boolean client;
+	protected StorageService storageService;
+	protected CreationService creationService = new CreationServiceImpl();
+	protected CheckerFactory checkerFactory;
+	protected boolean client;
 
 	public CrepuscoloObjectMapper(boolean client) {
 		this.client = client;
