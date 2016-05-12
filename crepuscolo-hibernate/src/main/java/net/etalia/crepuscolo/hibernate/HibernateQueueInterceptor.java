@@ -65,7 +65,7 @@ public class HibernateQueueInterceptor extends EmptyInterceptor implements Appli
 		if (log.isDebugEnabled()) {
 			log.debug("Flush dirty " + id + " : " + entity);
 		}
-		if (entity instanceof BaseEntity) {
+		if ((entity instanceof BaseEntity) && canBeProcessed((BaseEntity) entity, currentState, previousState, propertyNames)) {
 			notify((BaseEntity) entity, ChangeNotification.Type.UPDATED);
 		}
 		return false;
@@ -215,6 +215,10 @@ public class HibernateQueueInterceptor extends EmptyInterceptor implements Appli
 
 	protected Class<? extends BaseEntity> computeSendClass(BaseEntity entity) {
 		return entity.getClass();
+	}
+
+	protected boolean canBeProcessed(BaseEntity entity, Object[] curState, Object[] prevState, String[] names) {
+		return true;
 	}
 
 	protected void processNotification(ChangeNotification<BaseEntity> notification) {
