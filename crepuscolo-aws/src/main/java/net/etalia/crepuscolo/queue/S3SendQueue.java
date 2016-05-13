@@ -60,7 +60,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 	public void setFieldsResource(String resource) {
 		log.info("Loading S3 queue properties from " + resource);
 		InputStream str = getClass().getResourceAsStream(resource);
-		if (str == null) throw new IllegalArgumentException("Cannot find SS3QS queue fields resource file " + resource);
+		if (str == null) throw new IllegalArgumentException("Cannot find S3 queue fields resource file " + resource);
 		fields = new Properties();
 		try {
 			fields.load(str);
@@ -118,7 +118,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		return new S3SendBatch();
 	}
 
-	@CheckMode("SQS")
+	@CheckMode("S3")
 	protected String getPayload(T object) {
 		String[] fields = findFieldsFor(object, object.getClass());
 		OutField root = new OutField(null);
@@ -133,7 +133,7 @@ public class S3SendQueue<T> implements SendQueue<T> {
 		try {
 			payload = om.writeValueAsString(object, root);
 		} catch (Exception e) {
-			throw new IllegalArgumentException("Cannot serialize to SQS queue : " + object, e);
+			throw new IllegalArgumentException("Cannot serialize: " + object, e);
 		}
 		if (this.withClassPrefix) {
 			payload = fields[0] + ";" + payload;
