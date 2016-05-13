@@ -335,6 +335,10 @@
               <groupId>org.springframework</groupId>
               <artifactId>spring-aspects</artifactId>
             </aspectLibrary>
+            <aspectLibrary>
+              <groupId>net.etalia</groupId>
+              <artifactId>crepuscolo-core</artifactId>
+            </aspectLibrary>
           </aspectLibraries>
           <includes>
             <include>**/*.java</include>

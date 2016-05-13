@@ -11,6 +11,7 @@ import net.etalia.crepuscolo.services.CreationService;
 import net.etalia.crepuscolo.services.CreationServiceImpl;
 import net.etalia.crepuscolo.services.StorageService;
 import net.etalia.crepuscolo.utils.HibernateUnwrapper;
+import net.etalia.crepuscolo.utils.annotations.Sudo;
 import net.etalia.jalia.BeanJsonDeSer;
 import net.etalia.jalia.EntityFactory;
 import net.etalia.jalia.EntityNameProvider;
@@ -103,6 +104,7 @@ public class JaliaDomainFactory implements EntityNameProvider, EntityFactory, Js
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
+	@Sudo
 	public Object buildEntity(Class<?> clazz, String id, JsonContext context) {
 		if (BaseEntity.class.isAssignableFrom(clazz)) {
 			BaseEntity ret = null;

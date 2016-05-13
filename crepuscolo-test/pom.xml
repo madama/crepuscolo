@@ -11,6 +11,10 @@
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
+      <groupId>net.etalia</groupId>
+      <artifactId>crepuscolo-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
     </dependency>
