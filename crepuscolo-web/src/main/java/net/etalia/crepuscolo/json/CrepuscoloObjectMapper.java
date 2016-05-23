@@ -11,6 +11,7 @@ import net.etalia.crepuscolo.services.CreationService;
 import net.etalia.crepuscolo.services.CreationServiceImpl;
 import net.etalia.crepuscolo.services.StorageService;
 import net.etalia.jalia.DefaultOptions;
+import net.etalia.jalia.JaliaException;
 import net.etalia.jalia.JsonContext;
 import net.etalia.jalia.ObjectMapper;
 import net.etalia.jalia.OutField;
@@ -164,8 +165,8 @@ public class CrepuscoloObjectMapper extends ObjectMapper {
 				}
 				e = e.getCause();
 			}
-			if (orig instanceof RuntimeException) throw (RuntimeException)orig;
-			throw new IllegalStateException(orig);
+			if (orig instanceof JaliaException) throw (JaliaException)orig;
+			throw new JaliaException(orig);
 		}
 	}
 	
