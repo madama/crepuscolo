@@ -324,6 +324,16 @@
           <encoding>${encoding}</encoding>
           <forceJavacCompilerUse>true</forceJavacCompilerUse>
         </configuration>
+        <executions>
+           <execution>
+              <id>default-compile</id>
+              <phase>none</phase>
+           </execution>
+           <execution>
+              <id>default-testCompile</id>
+              <phase>none</phase>
+           </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -348,6 +358,18 @@
         </configuration>
         <executions>
           <execution>
+            <id>compile</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+          </execution>
+          <!-- execution>
             <phase>process-sources</phase>
             <goals>
               <goal>compile</goal>
@@ -357,7 +379,7 @@
               <source>${jvm.target}</source>
               <target>${jvm.target}</target>
             </configuration>
-          </execution>
+          </execution-->
         </executions>
       </plugin>
     </plugins>
