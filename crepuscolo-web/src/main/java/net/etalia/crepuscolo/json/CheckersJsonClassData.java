@@ -71,9 +71,24 @@ public class CheckersJsonClassData extends JsonClassData {
 	}
 	
 	@Override
-	public boolean setValue(String name, Object nval, Object tgt) {
-		// TODO we can implement checkers on setters here
-		return super.setValue(name, nval, tgt);
+	public boolean setValue(String name, Object nval, Object tgt, boolean force) {
+		Checker checker = null;
+		GetterCheckPoint cp = null;
+		if (checkerFactory != null) {
+			Method setter = super.setters.get(name);
+			if (setter == null) return false;
+			checker  = checkerFactory.getFor(setter);
+			cp = new GetterCheckPoint(tgt, setter);
+			cp.setAuthService(ServiceHack.getInstance().getBean(AuthService.class)); //TODO: try to avoid this...
+			if (checker.check(cp) != 0) {
+				//log.trace("... unauthorized: " + propertyName);
+				return false;
+			}
+			if (checker != null && checker instanceof Transformer) {
+				nval = ((Transformer) checker).transform(cp, nval);
+			}		
+		}
+		return super.setValue(name, nval, tgt, force);		
 	}
 
 	public void clearDefaults() {

@@ -43,6 +43,7 @@ public class DummyBean extends BaseEntity {
 	public int getAge() {
 		return age;
 	}
+	@MockCheck(testValue="setterCheck")
 	public void setAge(int age) {
 		this.age = age;
 	}

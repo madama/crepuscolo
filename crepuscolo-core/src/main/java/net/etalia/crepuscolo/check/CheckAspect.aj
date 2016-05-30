@@ -37,7 +37,8 @@ public aspect CheckAspect {
 		execution(@CheckerAnnotation * *.*(..))
 		)
 		&& !execution(* *.get*())
-		&& !execution(* *.is*());
+		&& !execution(* *.is*())
+		&& !execution(void *.set*(..));
 
 	@Autowired(required=true)
 	private AuthService authService;
