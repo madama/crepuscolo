@@ -19,6 +19,7 @@ import org.springframework.dao.TransientDataAccessException;
 
 import net.etalia.crepuscolo.utils.BufferedRequestWrapper;
 import net.etalia.crepuscolo.utils.BufferedResponseWrapper;
+import net.etalia.crepuscolo.utils.HandledHttpException;
 import net.etalia.crepuscolo.utils.RetryException;
 
 public class RetryFilter implements Filter {
@@ -64,7 +65,11 @@ public class RetryFilter implements Filter {
 				log.debug("No exception, no need to retry");
 				return;
 			} catch (Throwable e) {
-				log.warn("Got exception, checking for retry ", e);
+				if (e instanceof HandledHttpException) {
+					log.warn("Got exception, checking for retry: " + e.getMessage());
+				} else {
+					log.warn("Got exception, checking for retry ", e);
+				}
 				
 				// Save the exception 
 				exception = e;
