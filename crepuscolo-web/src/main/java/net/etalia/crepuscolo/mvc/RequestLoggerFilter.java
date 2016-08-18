@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +37,11 @@ public class RequestLoggerFilter implements Filter {
 			queryString = ((HttpServletRequest)request).getQueryString();
 			method = ((HttpServletRequest)request).getMethod();
 		}
-		log.info("TIME: " + time + " - METHOD: " + method + " - URL: " + url + " - PARAMS: " + queryString);
+		int code = -1;
+		if (response instanceof HttpServletResponse) {
+			code = ((HttpServletResponse) response).getStatus();
+		}
+		log.info("TIME: " + time + " - CODE: " + code + " - METHOD: " + method + " - URL: " + url + " - PARAMS: " + queryString);
 	}
 
 	@Override
