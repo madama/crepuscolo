@@ -12,8 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class RefreshAuthTokenFilter implements Filter {
 
+	private long maxTokenTime = -1;
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+		if (filterConfig.getInitParameter("maxTokenTime") != null) {
+			maxTokenTime = Long.parseLong(filterConfig.getInitParameter("maxTokenTime"));
+		}
 	}
 
 	@Override
@@ -22,8 +27,10 @@ public class RefreshAuthTokenFilter implements Filter {
 		AuthData auth = AuthFilter.getAuthData();
 		if (auth.getCurrentToken() != null) {
 			if (response instanceof HttpServletResponse) {
-				String newToken = AuthData.produce(auth.getUserId(), auth.getUserPassword(), auth.getSystemId());
-				((HttpServletResponse) response).setHeader("X-Authorization", newToken);
+				if (maxTokenTime != -1 && System.currentTimeMillis() < auth.getTimeStamp() + maxTokenTime) {
+					String newToken = AuthData.produce(auth.getUserId(), auth.getUserPassword(), auth.getSystemId());
+					((HttpServletResponse) response).setHeader("X-Authorization", newToken);
+				}
 			}
 		}
 	}
