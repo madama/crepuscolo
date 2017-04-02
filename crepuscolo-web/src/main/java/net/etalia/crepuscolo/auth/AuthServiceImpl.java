@@ -115,6 +115,7 @@ public class AuthServiceImpl implements AuthService {
 			//	authenticable = capiCaller.method(capiCaller.service().getUser(uid)).execute().cast();
 			}
 		}
+		checkFor(authenticable, level);
 		// If NONE, simply return whatever we have
 		if (level.equals(Verification.NONE)) {
 			return authenticable;
@@ -220,6 +221,9 @@ public class AuthServiceImpl implements AuthService {
 	public String verifyToken(String token, boolean validPort, boolean https, Verification level) {
 		AuthData ad = new AuthData(token, validPort, https);
 		return getPrincipalUserId(ad, level);
+	}
+
+	protected void checkFor(Authenticable authenticable, Verification level) {
 	}
 
 }

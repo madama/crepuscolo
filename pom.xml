@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.etalia</groupId>
   <artifactId>crepuscolo-pom</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Crepuscolo Java toolkit</name>
   <description>Yet another Java toolkit</description>
