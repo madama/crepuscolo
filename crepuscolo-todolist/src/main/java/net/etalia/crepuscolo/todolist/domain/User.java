@@ -14,7 +14,6 @@ import net.etalia.crepuscolo.domain.Authenticable;
 import net.etalia.crepuscolo.domain.BaseEntity;
 import net.etalia.crepuscolo.domain.Stored;
 import net.etalia.crepuscolo.validation.ValidationMessage;
-import net.etalia.jalia.annotations.JsonIgnore;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -25,8 +24,6 @@ public class User extends BaseEntity implements Authenticable, Stored {
 
 	private String email;
 	private String username;
-	private String password;
-	private String tokenSalt;
 	private String description;
 
 	@Email(message=ValidationMessage.MALFORMED)
@@ -47,27 +44,6 @@ public class User extends BaseEntity implements Authenticable, Stored {
 	}
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	@Override
-	@JsonIgnore
-	@Column(nullable=false)
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	@Override
-	@JsonIgnore
-	@Column(nullable=false)
-	public String getTokenSalt() {
-		return tokenSalt;
-	}
-	@Override
-	public void setTokenSalt(String tokenSalt) {
-		this.tokenSalt = tokenSalt;
 	}
 
 	@NotNull(message=ValidationMessage.REQUIRED)

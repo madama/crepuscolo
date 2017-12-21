@@ -86,9 +86,9 @@ public class CheckersJsonClassData extends JsonClassData {
 			}
 			if (checker != null && checker instanceof Transformer) {
 				nval = ((Transformer) checker).transform(cp, nval);
-			}		
+			}
 		}
-		return super.setValue(name, nval, tgt, force);		
+		return super.setValue(name, nval, tgt, force);
 	}
 
 	public void clearDefaults() {
