@@ -67,9 +67,8 @@ public class AuthServiceImpl implements AuthService {
 			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED).errorCode("INVALID");
 		}
 		// Check for time validity
-		if (System.currentTimeMillis() > authData.getTimeStamp() + maxTokenTime) {
-			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED).errorCode("INVALID");
-		}
+		checkTimeValidity(authData);
+
 		if (level.equals(Verification.LOGGED)) {
 			// No need to do more checks on the DB
 			return uid;
@@ -89,9 +88,8 @@ public class AuthServiceImpl implements AuthService {
 			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED);
 		}
 		// Check for time validity
-		if (System.currentTimeMillis() > authData.getTimeStamp() + maxTokenTime) {
-			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED);
-		}
+		checkTimeValidity(authData);
+
 		if (level.equals(Verification.LOGGED) || authData.getSystemId() != null) {
 			// No need to check on the DB
 			return sysid;
@@ -131,9 +129,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 		
 		// Check for time validity
-		if (System.currentTimeMillis() > authData.getTimeStamp() + maxTokenTime) {
-			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED).errorCode("INVALID");
-		}
+		checkTimeValidity(authData);
 		
 		if (level.equals(Verification.LOGGED) || authData.getSystemId() != null) {
 			return authenticable;
@@ -224,6 +220,16 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	protected void checkFor(Authenticable authenticable, Verification level) {
+	}
+
+	protected void checkTimeValidity(AuthData authData) {
+		if (checkTimeValidityCondition(authData)) {
+			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED).errorCode("INVALID");
+		}
+	}
+
+	protected boolean checkTimeValidityCondition(AuthData authData) {
+		return System.currentTimeMillis() > authData.getTimeStamp() + maxTokenTime;
 	}
 
 }

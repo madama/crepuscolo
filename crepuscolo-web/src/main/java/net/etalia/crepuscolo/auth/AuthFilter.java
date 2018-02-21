@@ -1,7 +1,9 @@
 package net.etalia.crepuscolo.auth;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.Filter;
@@ -74,6 +76,15 @@ public class AuthFilter implements Filter {
 				try {
 					// Create and store auth data
 					authData.set(new AuthData(auth, validPorts.contains(localPort), request.isSecure()));
+
+					//add additional metadata if present
+					for(String h : Collections.list(hrequest.getHeaderNames())) {
+						if(h != null && h.startsWith("X-Authorization-Metadata-")) {
+							String key = h.substring("X-Authorization-Metadata-".length()).toLowerCase(Locale.ENGLISH);
+							String value = hrequest.getHeader(h);
+							authData.get().setMetadata(key, value);
+						}
+					}
 				} catch (Exception e) {
 					((HttpServletResponse)response).sendError(301, "Invalid header");
 				}

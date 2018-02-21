@@ -74,6 +74,7 @@ public class AuthData {
 	}
 
 	private Map<String,Object> incoming = new HashMap<String, Object>();
+	private Map<String, String> metadata = new HashMap<>();
 	private String currentToken;
 
 	public AuthData(String header, boolean validPort, boolean https) {
@@ -167,6 +168,14 @@ public class AuthData {
 
 	public String getCurrentToken() {
 		return currentToken;
+	}
+
+	public String getMetadata(String key) {
+		return metadata.get(key);
+	}
+
+	public void setMetadata(String key, String value) {
+		metadata.put(key, value);
 	}
 
 }
