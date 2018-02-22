@@ -79,8 +79,8 @@ public class AuthFilter implements Filter {
 
 					//add additional metadata if present
 					for(String h : Collections.list(hrequest.getHeaderNames())) {
-						if(h != null && h.startsWith("X-Authorization-Metadata-")) {
-							String key = h.substring("X-Authorization-Metadata-".length()).toLowerCase(Locale.ENGLISH);
+						if(h != null && h.toLowerCase(Locale.ENGLISH).startsWith("x-authorization-metadata-")) {
+							String key = h.substring("x-authorization-metadata-".length()).toLowerCase(Locale.ENGLISH);
 							String value = hrequest.getHeader(h);
 							authData.get().setMetadata(key, value);
 						}
