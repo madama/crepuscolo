@@ -229,7 +229,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	protected boolean checkTimeValidityCondition(AuthData authData) {
-		return System.currentTimeMillis() > authData.getTimeStamp() + maxTokenTime;
+		return System.currentTimeMillis() <= authData.getTimeStamp() + maxTokenTime;
 	}
 
 }
