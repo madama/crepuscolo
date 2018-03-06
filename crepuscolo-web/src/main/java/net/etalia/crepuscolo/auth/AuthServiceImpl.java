@@ -223,7 +223,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	protected void checkTimeValidity(AuthData authData) {
-		if (checkTimeValidityCondition(authData)) {
+		if (!checkTimeValidityCondition(authData)) {
 			throw new HttpException().statusCode(HttpStatus.UNAUTHORIZED).errorCode("INVALID");
 		}
 	}
